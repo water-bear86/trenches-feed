@@ -37,8 +37,8 @@
  "label": "2-minute-30 flash (headlines + top briefs)",
  "edition": "2026-10-08",
  "title": "{{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (2-minute-30 flash (headlines + top briefs))",
- "generated_at": "2026-10-08T18:25:31-07:00",
- "data_snapshot_at": "2026-10-08T18:25:31-07:00",
+ "generated_at": "2026-10-09T01:26:16+00:00",
+ "data_snapshot_at": "2026-10-09T01:26:16+00:00",
  "target_words": 375,
  "word_count": 372,
  "est_read_seconds": 149,
@@ -132,8 +132,8 @@
      "id": "2026-10-08-2.5min-majors",
      "segment": "Crypto Markets and Policy",
      "segment_id": "broader",
-     "headline": "Crypto markets: Bitcoin near $81,600",
-     "script_text": "As of six twenty-five Pacific time, Bitcoin was near eighty-one thousand six hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy dollars, down about four per cent, and Solana near one hundred and nine, down about six and a half per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
+     "headline": "Crypto markets: Bitcoin near $81,700",
+     "script_text": "As of six twenty-six Pacific time, Bitcoin was near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy-five dollars, down about four per cent, and Solana near one hundred and nine, down about six and a half per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
      "source_urls": [
       "https://www.coingecko.com/",
       "https://x.com/i/trending/2108045012894433331",
@@ -262,32 +262,32 @@
    ]
   }
  ],
- "full_script": "It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}.\n\nMemecoin Markets.\n\nThe memecoin platform Pump.fun is under criticism after figures circulated suggesting its top twenty-five token creators earned about one hundred and twenty-eight million dollars, while only six of their roughly seven hundred and seventy thousand tokens reached a twenty-million-dollar market value.\n\nPump.fun also announced today that new tokens can be paired against any token already on the platform, a change the company says adds demand for established tokens.\n\nNewly created Solana tokens continue to swing sharply. Market data show a token called TikTok, launched today, up more than sixteen hundred per cent, while another, swordinu, has lost nearly all of its value.\n\nA trader known as Frogman says about four million dollars was stolen from his digital wallets during a crypto conference in Singapore. Separately, about twelve and a half million dollars was withdrawn from a trading pool run by a project called 79thVault.\n\nA trader places a heavily leveraged Bitcoin bet.\n\nCrypto Markets and Policy.\n\nAs of six twenty-five Pacific time, Bitcoin was near eighty-one thousand six hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy dollars, down about four per cent, and Solana near one hundred and nine, down about six and a half per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.\n\nInvestors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.\n\nThe European Union's markets regulator has told licensed crypto firms to phase out stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven.\n\nThe U.S. Commodity Futures Trading Commission is proceeding with its own crypto trading rules while legislation stalls in Congress.\n\nStrategy and Cardone Capital add to their Bitcoin holdings.\n\nEmerging Trends.\n\nTokens based on AI-generated characters, including Frank Ashford and Jean Phil, are among the most actively traded on Solana this week.\n\nTokens tied to company shares gain attention on Base and Solana.\n\nDerive's token rises after a research report on AI agents.\n\nInterest grows in memecoins that share revenue with holders.\n\nThat's the news for this hour. I'm {{ANCHOR_NAME}}.",
- "prices_as_of": "2026-10-08T18:25:31-07:00",
+ "full_script": "It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}.\n\nMemecoin Markets.\n\nThe memecoin platform Pump.fun is under criticism after figures circulated suggesting its top twenty-five token creators earned about one hundred and twenty-eight million dollars, while only six of their roughly seven hundred and seventy thousand tokens reached a twenty-million-dollar market value.\n\nPump.fun also announced today that new tokens can be paired against any token already on the platform, a change the company says adds demand for established tokens.\n\nNewly created Solana tokens continue to swing sharply. Market data show a token called TikTok, launched today, up more than sixteen hundred per cent, while another, swordinu, has lost nearly all of its value.\n\nA trader known as Frogman says about four million dollars was stolen from his digital wallets during a crypto conference in Singapore. Separately, about twelve and a half million dollars was withdrawn from a trading pool run by a project called 79thVault.\n\nA trader places a heavily leveraged Bitcoin bet.\n\nCrypto Markets and Policy.\n\nAs of six twenty-six Pacific time, Bitcoin was near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy-five dollars, down about four per cent, and Solana near one hundred and nine, down about six and a half per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.\n\nInvestors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.\n\nThe European Union's markets regulator has told licensed crypto firms to phase out stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven.\n\nThe U.S. Commodity Futures Trading Commission is proceeding with its own crypto trading rules while legislation stalls in Congress.\n\nStrategy and Cardone Capital add to their Bitcoin holdings.\n\nEmerging Trends.\n\nTokens based on AI-generated characters, including Frank Ashford and Jean Phil, are among the most actively traded on Solana this week.\n\nTokens tied to company shares gain attention on Base and Solana.\n\nDerive's token rises after a research report on AI agents.\n\nInterest grows in memecoins that share revenue with holders.\n\nThat's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "prices_as_of": "2026-10-09T01:26:16+00:00",
  "market": {
   "source": "coingecko",
   "assets": {
    "BTC": {
-    "usd": 81636,
-    "change_24h_pct": -1.85
+    "usd": 81669,
+    "change_24h_pct": -1.8
    },
    "ETH": {
-    "usd": 2472.16,
-    "change_24h_pct": -4.06
+    "usd": 2472.6,
+    "change_24h_pct": -4.04
    },
    "SOL": {
-    "usd": 108.98,
-    "change_24h_pct": -6.3
+    "usd": 109.03,
+    "change_24h_pct": -6.28
    },
    "HYPE": {
-    "usd": 84.38,
-    "change_24h_pct": -4.73
+    "usd": 84.42,
+    "change_24h_pct": -4.69
    }
   },
   "global": {
    "total_mcap_usd": 2770713998054.3936,
    "total_mcap_change_24h_pct": -5.26
   },
-  "prices_as_of": "2026-10-08T18:25:31-07:00"
+  "prices_as_of": "2026-10-09T01:26:16+00:00"
  }
 }

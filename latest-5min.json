@@ -37,8 +37,8 @@
  "label": "5-minute program",
  "edition": "2026-10-08",
  "title": "{{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (5-minute program)",
- "generated_at": "2026-10-08T18:25:31-07:00",
- "data_snapshot_at": "2026-10-08T18:25:31-07:00",
+ "generated_at": "2026-10-09T01:26:16+00:00",
+ "data_snapshot_at": "2026-10-09T01:26:16+00:00",
  "target_words": 750,
  "word_count": 749,
  "est_read_seconds": 300,
@@ -46,7 +46,7 @@
  "wpm_assumed": 150,
  "disclaimer": "This report is for information only and is not financial advice. Token mentions are news, not recommendations. Memecoin data is unverified.",
  "intro": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.",
- "outro": "Prices are as of six twenty-five Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "outro": "Prices are as of six twenty-six Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
  "segments": [
   {
    "id": "trenches",
@@ -113,7 +113,7 @@
      "segment": "Memecoin Markets",
      "segment_id": "trenches",
      "headline": "High-risk trader returns with large leveraged Bitcoin bet",
-     "script_text": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand six hundred dollars.",
+     "script_text": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand seven hundred dollars.",
      "source_urls": [
       "https://x.com/i/trending/2108193702803804444",
       "https://x.com/i/trending/2107903670377701822"
@@ -132,8 +132,8 @@
      "id": "2026-10-08-5min-majors",
      "segment": "Crypto Markets and Policy",
      "segment_id": "broader",
-     "headline": "Crypto markets: Bitcoin near $81,600",
-     "script_text": "Cryptocurrency prices fell over the past day. As of six twenty-five Pacific time, Bitcoin was trading near eighty-one thousand six hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
+     "headline": "Crypto markets: Bitcoin near $81,700",
+     "script_text": "Cryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
      "source_urls": [
       "https://www.coingecko.com/",
       "https://x.com/i/trending/2108045012894433331",
@@ -262,32 +262,32 @@
    ]
   }
  ],
- "full_script": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.\n\nWe begin with memecoins, speculative digital tokens often based on internet jokes or personalities.\n\nThe memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.\n\nPump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.\n\nTrading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.\n\nTwo security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.\n\nA trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand six hundred dollars.\n\nTurning now to the wider cryptocurrency market.\n\nCryptocurrency prices fell over the past day. As of six twenty-five Pacific time, Bitcoin was trading near eighty-one thousand six hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.\n\nInvestors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.\n\nThe European Union's markets regulator has told licensed crypto firms to phase out stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven.\n\nThe U.S. Commodity Futures Trading Commission is proceeding with its own crypto trading rules while legislation stalls in Congress.\n\nStrategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.\n\nFinally, a look at the themes shaping speculative trading this week.\n\nTokens based on AI-generated characters, including Frank Ashford and Jean Phil, are among the most actively traded on Solana this week.\n\nTokens linked to company shares are gaining attention. Base network lead Jesse Pollak called tokenized shares the industry's next major growth area.\n\nA Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.\n\nInjective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.\n\nPrices are as of six twenty-five Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- "prices_as_of": "2026-10-08T18:25:31-07:00",
+ "full_script": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.\n\nWe begin with memecoins, speculative digital tokens often based on internet jokes or personalities.\n\nThe memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.\n\nPump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.\n\nTrading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.\n\nTwo security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.\n\nA trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand seven hundred dollars.\n\nTurning now to the wider cryptocurrency market.\n\nCryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.\n\nInvestors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.\n\nThe European Union's markets regulator has told licensed crypto firms to phase out stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven.\n\nThe U.S. Commodity Futures Trading Commission is proceeding with its own crypto trading rules while legislation stalls in Congress.\n\nStrategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.\n\nFinally, a look at the themes shaping speculative trading this week.\n\nTokens based on AI-generated characters, including Frank Ashford and Jean Phil, are among the most actively traded on Solana this week.\n\nTokens linked to company shares are gaining attention. Base network lead Jesse Pollak called tokenized shares the industry's next major growth area.\n\nA Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.\n\nInjective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.\n\nPrices are as of six twenty-six Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "prices_as_of": "2026-10-09T01:26:16+00:00",
  "market": {
   "source": "coingecko",
   "assets": {
    "BTC": {
-    "usd": 81636,
-    "change_24h_pct": -1.85
+    "usd": 81669,
+    "change_24h_pct": -1.8
    },
    "ETH": {
-    "usd": 2472.16,
-    "change_24h_pct": -4.06
+    "usd": 2472.6,
+    "change_24h_pct": -4.04
    },
    "SOL": {
-    "usd": 108.98,
-    "change_24h_pct": -6.3
+    "usd": 109.03,
+    "change_24h_pct": -6.28
    },
    "HYPE": {
-    "usd": 84.38,
-    "change_24h_pct": -4.73
+    "usd": 84.42,
+    "change_24h_pct": -4.69
    }
   },
   "global": {
    "total_mcap_usd": 2770713998054.3936,
    "total_mcap_change_24h_pct": -5.26
   },
-  "prices_as_of": "2026-10-08T18:25:31-07:00"
+  "prices_as_of": "2026-10-09T01:26:16+00:00"
  }
 }
