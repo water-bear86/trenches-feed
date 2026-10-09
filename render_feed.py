@@ -229,7 +229,7 @@ def main():
     market = load_market(pool)
     pool = fill(apply_market(pool, market_tokens(market)) if market else pool)
     pool["data_snapshot_at"] = market["prices_as_of"] if market else pool["data_snapshot_at"]
-    now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    now = datetime.datetime.now(ZoneInfo("America/Los_Angeles")).isoformat(timespec="seconds")
     pool["edition_generated_at"] = pool["generated_at"]; pool["generated_at"] = now
     eds = {f: build(pool, f) for f in FORMATS}
     for ed in eds.values(): ed["prices_as_of"] = market["prices_as_of"] if market else None; ed["market"] = market

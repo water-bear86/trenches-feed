@@ -68,7 +68,8 @@ def main():
         for k in ("HYPE",):
             if k in old.get("assets", {}): m["assets"][k] = old["assets"][k]
         if "global" in old: m["global"] = old["global"]
-    m["prices_as_of"] = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    from zoneinfo import ZoneInfo
+    m["prices_as_of"] = datetime.datetime.now(ZoneInfo("America/Los_Angeles")).isoformat(timespec="seconds")
     json.dump(m, open(path, "w"), indent=1)
     print("prices:", {k: v["usd"] for k, v in m["assets"].items()}, "via", m["source"])
     sys.argv = sys.argv[:1]
