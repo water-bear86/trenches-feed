@@ -6,10 +6,10 @@
 <atom:link href="https://water-bear86.github.io/trenches-feed/feed.xml" rel="self" type="application/rss+xml"/>
 <description>Radio-ready crypto news: the trenches, broader crypto, trending metas. Not financial advice.</description>
 <language>en-us</language>
-<lastBuildDate>Thu, 08 Oct 2026 18:26:46 -0700</lastBuildDate>
+<lastBuildDate>Fri, 09 Oct 2026 01:27:23 +0000</lastBuildDate>
 <ttl>30</ttl>
 <item>
-<title>Full script (12-minute program, 1786 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (12-minute program)</title>
+<title>Full script (12-minute program, 1780 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (12-minute program)</title>
 <link>https://water-bear86.github.io/trenches-feed/latest-12min.json</link>
 <description>{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.
 
@@ -23,7 +23,7 @@ Trading data show the extreme volatility of newly created tokens on the Solana b
 
 Two security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.
 
-On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near eighty-one thousand seven hundred dollars as of six twenty-six Pacific time. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.
+On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near eighty-one thousand seven hundred dollars as of six twenty-seven Pacific time. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.
 
 Hunter Biden has released a report on the collapse of LAPTOP, a memecoin he is associated with on the Base network. The token spiked and then fell ninety-eight per cent within an hour of its launch last month. The report blames two market makers, the firms paid to keep trading orderly, for supplying very little money to the market. It says one provided about fifty-two hundred dollars and withdrew it eighty-four seconds after the peak. It also says founders' tokens remained locked.
 
@@ -35,7 +35,7 @@ On BNB Chain, a token named with the Chinese characters for 'lobster' is among t
 
 Turning now to the wider cryptocurrency market.
 
-Cryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
+Cryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
 
 Investors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.
 
@@ -49,7 +49,7 @@ Ethereum researcher Justin Drake is urging holders to move funds to new, unused 
 
 The amount of Bitcoin held on trading platforms has fallen to about two point six eight million coins, roughly six and a half per cent of the supply, after the largest one-day withdrawal in seven months on Tuesday. Analysts often read this as a sign that holders are moving coins into long-term storage, though it has not always led to higher prices.
 
-The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near eighty-four dollars as of six twenty-six Pacific time, down about four and a half per cent over twenty-four hours, according to CoinGecko.
+The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near eighty-four dollars as of six twenty-seven Pacific time, down about five per cent over twenty-four hours, according to CoinGecko.
 
 In South Africa, First National Bank has begun offering cryptocurrency trading to nearly nine million customers through a partnership with the local exchange VALR. Customers can buy Bitcoin, ether, XRP, Solana and USDT, starting from ten rand.
 
@@ -67,13 +67,13 @@ Some traders are favouring memecoins that pay holders a share of revenue. The In
 
 Traders are also sharing results from automated programs that scan new tokens, screen out likely scams and trade without human input. One user claims one hundred dollars grew to more than seventeen thousand over four nights. Such claims have not been independently verified.
 
-Prices quoted are as of six twenty-six Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
+Prices quoted are as of six twenty-seven Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
 <category>Full Script 12min</category>
-<guid isPermaLink="false">trenches-2026-10-08-full-12min-739013e4</guid>
+<guid isPermaLink="false">trenches-2026-10-08-full-12min-c3c131e5</guid>
 <pubDate>Thu, 08 Oct 2026 18:35:00 -0700</pubDate>
 </item>
 <item>
-<title>Full script (7-minute program, 1025 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (7-minute program)</title>
+<title>Full script (7-minute program, 1022 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (7-minute program)</title>
 <link>https://water-bear86.github.io/trenches-feed/latest-7min.json</link>
 <description>{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.
 
@@ -91,7 +91,7 @@ A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin
 
 Turning now to the wider cryptocurrency market.
 
-Cryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
+Cryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
 
 Investors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.
 
@@ -111,13 +111,13 @@ A Citrini Research report on AI agents and crypto helped lift Derive's token abo
 
 Injective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.
 
-Prices quoted are as of six twenty-six Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
+Prices quoted are as of six twenty-seven Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
 <category>Full Script 7min</category>
-<guid isPermaLink="false">trenches-2026-10-08-full-7min-685766bb</guid>
+<guid isPermaLink="false">trenches-2026-10-08-full-7min-43108d35</guid>
 <pubDate>Thu, 08 Oct 2026 18:35:00 -0700</pubDate>
 </item>
 <item>
-<title>Full script (5-minute program, 749 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (5-minute program)</title>
+<title>Full script (5-minute program, 746 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (5-minute program)</title>
 <link>https://water-bear86.github.io/trenches-feed/latest-5min.json</link>
 <description>{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.
 
@@ -135,7 +135,7 @@ A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin
 
 Turning now to the wider cryptocurrency market.
 
-Cryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
+Cryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
 
 Investors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.
 
@@ -155,13 +155,13 @@ A Citrini Research report on AI agents and crypto helped lift Derive's token abo
 
 Injective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.
 
-Prices are as of six twenty-six Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
+Prices are as of six twenty-seven Pacific time. That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
 <category>Full Script 5min</category>
-<guid isPermaLink="false">trenches-2026-10-08-full-5min-3c9d370a</guid>
+<guid isPermaLink="false">trenches-2026-10-08-full-5min-3b64d3b5</guid>
 <pubDate>Thu, 08 Oct 2026 18:35:00 -0700</pubDate>
 </item>
 <item>
-<title>Full script (2-minute-30 flash (headlines + top briefs), 372 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (2-minute-30 flash (headlines + top briefs))</title>
+<title>Full script (2-minute-30 flash (headlines + top briefs), 369 words): {{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (2-minute-30 flash (headlines + top briefs))</title>
 <link>https://water-bear86.github.io/trenches-feed/latest-2.5min.json</link>
 <description>It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}.
 
@@ -179,7 +179,7 @@ A trader places a heavily leveraged Bitcoin bet.
 
 Crypto Markets and Policy.
 
-As of six twenty-six Pacific time, Bitcoin was near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy-five dollars, down about four per cent, and Solana near one hundred and nine, down about six and a half per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.
+As of six twenty-seven Pacific time, Bitcoin was near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether was near two thousand four hundred and seventy-five dollars, down about four per cent, and Solana near one hundred and nine, down about six per cent. More than a billion dollars in leveraged trades were forcibly closed earlier today.
 
 Investors withdrew about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, led by BlackRock's fund.
 
@@ -201,7 +201,7 @@ Interest grows in memecoins that share revenue with holders.
 
 That's the news for this hour. I'm {{ANCHOR_NAME}}.</description>
 <category>Full Script 2.5min</category>
-<guid isPermaLink="false">trenches-2026-10-08-full-2.5min-cb30279d</guid>
+<guid isPermaLink="false">trenches-2026-10-08-full-2.5min-4ecb3f4b</guid>
 <pubDate>Thu, 08 Oct 2026 18:35:00 -0700</pubDate>
 </item>
 <item>
@@ -258,13 +258,13 @@ https://x.com/i/trending/2108154220373581849</description>
 <item>
 <title>[Memecoin Markets] High-risk trader returns with large leveraged Bitcoin bet</title>
 <link>https://x.com/i/trending/2108193702803804444</link>
-<description>On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near eighty-one thousand seven hundred dollars as of six twenty-six Pacific time. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.
+<description>On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near eighty-one thousand seven hundred dollars as of six twenty-seven Pacific time. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.
 
 Sources:
 https://x.com/i/trending/2108193702803804444
 https://x.com/i/trending/2107903670377701822</description>
 <category>Memecoin Markets</category>
-<guid isPermaLink="false">trenches-2026-10-08-12min-leverage-degens-57730b2d</guid>
+<guid isPermaLink="false">trenches-2026-10-08-12min-leverage-degens-6d7f8d8d</guid>
 <pubDate>Thu, 08 Oct 2026 13:57:13 +0000</pubDate>
 </item>
 <item>
@@ -316,14 +316,14 @@ https://x.com/i/trending/2107824439673164105</description>
 <item>
 <title>[Crypto Markets and Policy] Crypto markets: Bitcoin near $81,700</title>
 <link>https://www.coingecko.com/</link>
-<description>Cryptocurrency prices fell over the past day. As of six twenty-six Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six and a half per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
+<description>Cryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.
 
 Sources:
 https://www.coingecko.com/
 https://x.com/i/trending/2108045012894433331
 https://x.com/i/trending/2107668599901213099</description>
 <category>Crypto Markets and Policy</category>
-<guid isPermaLink="false">trenches-2026-10-08-12min-majors-dafa7ae6</guid>
+<guid isPermaLink="false">trenches-2026-10-08-12min-majors-b38b69d7</guid>
 <pubDate>Fri, 09 Oct 2026 01:13:00 +0000</pubDate>
 </item>
 <item>
@@ -399,13 +399,13 @@ https://x.com/i/trending/2108079921281356202</description>
 <item>
 <title>[Crypto Markets and Policy] Hyperliquid transfers $330M in tokens to institution</title>
 <link>https://x.com/i/trending/2108154223439597875</link>
-<description>The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near eighty-four dollars as of six twenty-six Pacific time, down about four and a half per cent over twenty-four hours, according to CoinGecko.
+<description>The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near eighty-four dollars as of six twenty-seven Pacific time, down about five per cent over twenty-four hours, according to CoinGecko.
 
 Sources:
 https://x.com/i/trending/2108154223439597875
 https://www.coingecko.com/en/coins/hyperliquid</description>
 <category>Crypto Markets and Policy</category>
-<guid isPermaLink="false">trenches-2026-10-08-12min-hype-otc-e1d9b5f7</guid>
+<guid isPermaLink="false">trenches-2026-10-08-12min-hype-otc-bf515d85</guid>
 <pubDate>Thu, 08 Oct 2026 13:47:30 +0000</pubDate>
 </item>
 <item>

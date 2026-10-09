@@ -2,25 +2,25 @@
  "source": "coingecko",
  "assets": {
   "BTC": {
-   "usd": 81669,
+   "usd": 81687,
    "change_24h_pct": -1.8
   },
   "ETH": {
-   "usd": 2472.6,
-   "change_24h_pct": -4.04
+   "usd": 2473.28,
+   "change_24h_pct": -4.02
   },
   "SOL": {
-   "usd": 109.03,
-   "change_24h_pct": -6.28
+   "usd": 109.07,
+   "change_24h_pct": -6.23
   },
   "HYPE": {
-   "usd": 84.42,
-   "change_24h_pct": -4.69
+   "usd": 84.44,
+   "change_24h_pct": -4.76
   }
  },
  "global": {
   "total_mcap_usd": 2770713998054.3936,
   "total_mcap_change_24h_pct": -5.26
  },
- "prices_as_of": "2026-10-09T01:26:16+00:00"
+ "prices_as_of": "2026-10-08T18:27:23-07:00"
 }
