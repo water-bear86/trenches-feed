@@ -8,7 +8,7 @@ Voice: a calm, neutral, authoritative public-broadcaster hourly newscast. No sla
   Claims from X posts or AI-written X summaries are attributed or framed as reports, never stated as fact.
 - **Explain jargon briefly** on first use: memecoin, stablecoin, leverage/liquidation, exchange-traded fund, market maker,
   multi-signature, tokenized shares, over-the-counter.
-- **Market numbers, business-report style:** "Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars this evening,
+- **Market numbers, business-report style (use the [[TOKENS]] from README, never hard-coded prices):** "Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars this evening,
   down about two per cent." Round sensibly; say the source and the time of the price snapshot.
 - **Canadian spelling and usage:** per cent, favour, centre, criticized, co-ordinated, cheque, "U.S." Numbers are written as spoken words.
 - **Structure:**

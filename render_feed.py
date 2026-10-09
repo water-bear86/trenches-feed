@@ -15,6 +15,7 @@ Env: FEED_BASE_URL (public base URL once hosted); optional STATION_NAME, ANCHOR_
      TIME_* should normally be filled by the station at playback).
 """
 import json, os, sys, glob, datetime, email.utils, hashlib
+from zoneinfo import ZoneInfo
 from xml.sax.saxutils import escape
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +43,75 @@ def fill(o):
     if isinstance(o, list): return [fill(x) for x in o]
     if isinstance(o, dict): return {k: fill(v) for k, v in o.items()}
     return o
+# ---------------- structured market numbers ----------------
+# Story text may contain [[TOKENS]] that are filled from market.json (written by update_prices.py / research job):
+#   [[BTC_PRICE]] [[ETH_PRICE]] [[SOL_PRICE]] [[HYPE_PRICE]]        spoken price, e.g. "eighty-one thousand seven hundred"
+#   [[BTC_CHANGE]] ... [[HYPE_CHANGE]]                              e.g. "down about two per cent" / "little changed"
+#   [[TOTAL_MCAP]] [[TOTAL_MCAP_CHANGE]]                            e.g. "two point seven eight trillion"
+#   [[MARKET_MOVE_PAST]] [[MARKET_MOVE_PRESENT]]                    "fell"/"rose"/"were mixed", "fall"/"rise"/"are mixed"
+#   [[PRICES_AS_OF_SPOKEN]]                                         e.g. "six fifteen Pacific time"
+#   [[BTC_PRICE_DIGITS]] (for headlines)                            e.g. "$81,700"
+ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+def words(n):
+    n = int(n)
+    if n < 20: return ONES[n]
+    if n < 100: return TENS[n // 10] + ("" if n % 10 == 0 else "-" + ONES[n % 10])
+    if n < 1000: return ONES[n // 100] + " hundred" + ("" if n % 100 == 0 else " and " + words(n % 100))
+    if n < 1_000_000: return words(n // 1000) + " thousand" + ("" if n % 1000 == 0 else (" and " if n % 1000 < 100 else " ") + words(n % 1000))
+    return words(n // 1_000_000) + " million" + ("" if n % 1_000_000 == 0 else " " + words(n % 1_000_000))
+def spoken_price(p):
+    p = float(p)
+    if p >= 10000: return words(round(p / 100) * 100)
+    if p >= 1000: return words(round(p / 5) * 5)
+    if p >= 100: return words(round(p))
+    if p >= 10: return words(round(p))
+    d = round(p, 2); w = words(int(d)) + " dollars"
+    c = round((d - int(d)) * 100)
+    return w + (f" and {words(c)} cents" if c else "")
+def spoken_change(pct):
+    a = abs(float(pct))
+    if a < 0.5: return "little changed"
+    h = round(a * 2) / 2
+    num = words(int(h)) + (" and a half" if h % 1 else "") if h >= 1 else "half a"
+    return f"{'up' if pct > 0 else 'down'} about {num} per cent"
+def spoken_trillions(x):
+    t = round(float(x) / 1e12, 2); i = int(t); dec = f"{t:.2f}".split(".")[1].rstrip("0")
+    return words(i) + ((" point " + " ".join(ONES[int(c)] for c in dec)) if dec else "") + " trillion"
+def spoken_time(iso):
+    dt = datetime.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
+    h = dt.hour % 12 or 12; m = dt.minute
+    mm = "o'clock" if m == 0 else (("oh " + ONES[m]) if m < 10 else words(m))
+    return f"{words(h)} {mm} Pacific time"
+def market_tokens(m):
+    t = {}
+    for sym in ("BTC", "ETH", "SOL", "HYPE"):
+        a = (m.get("assets") or {}).get(sym)
+        if not a: continue
+        t[f"{sym}_PRICE"] = spoken_price(a["usd"]); t[f"{sym}_CHANGE"] = spoken_change(a["change_24h_pct"])
+        t[f"{sym}_PRICE_DIGITS"] = f"${round(a['usd'] / 100) * 100:,.0f}" if a["usd"] >= 10000 else f"${a['usd']:,.2f}"
+    g = m.get("global") or {}
+    if g.get("total_mcap_usd"):
+        t["TOTAL_MCAP"] = spoken_trillions(g["total_mcap_usd"]); t["TOTAL_MCAP_CHANGE"] = spoken_change(g.get("total_mcap_change_24h_pct", 0))
+    ch = [m["assets"][k]["change_24h_pct"] for k in ("BTC", "ETH", "SOL") if k in m.get("assets", {})]
+    up, dn = sum(c >= 0.5 for c in ch), sum(c <= -0.5 for c in ch)
+    t["MARKET_MOVE_PAST"], t["MARKET_MOVE_PRESENT"] = ("fell", "fall") if dn == len(ch) else ("rose", "rise") if up == len(ch) else ("were mixed", "are mixed")
+    t["PRICES_AS_OF_SPOKEN"] = spoken_time(m["prices_as_of"])
+    return t
+def apply_market(o, t):
+    if isinstance(o, str):
+        for k, v in t.items(): o = o.replace("[[" + k + "]]", v)
+        return o
+    if isinstance(o, list): return [apply_market(x, t) for x in o]
+    if isinstance(o, dict): return {k: apply_market(v, t) for k, v in o.items()}
+    return o
+def load_market(pool):
+    p = os.path.join(BASE, "market.json")
+    m = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
+    if not m or m.get("prices_as_of", "") < pool.get("market_snapshot", {}).get("prices_as_of", ""):
+        m = pool.get("market_snapshot") or m
+    return m
+
 def spoken_wc(script):
     return wc(script) + sum(script.count("{{" + k + "}}") * (v["spoken_word_estimate"] - 1) for k, v in VARIABLES.items())
 def var_block():
@@ -103,7 +173,7 @@ def build(pool, fmt):
     return dict(variables=var_block(), format=fmt, label=label, edition=pool["edition"], title=f"{pool['title_base']} ({label})",
                 generated_at=pool["generated_at"], data_snapshot_at=pool["data_snapshot_at"],
                 target_words=target, word_count=words, est_read_seconds=round(words / WPM * 60),
-                est_read_time=f"{words // WPM}:{round(words / WPM * 60) % 60:02d}", wpm_assumed=WPM,
+                est_read_time=f"{round(words / WPM * 60) // 60}:{round(words / WPM * 60) % 60:02d}", wpm_assumed=WPM,
                 disclaimer=pool["disclaimer"], intro=pool[f"intro_{ist}"], outro=pool[f"outro_{ist}"],
                 segments=segs, full_script=script)
 
@@ -156,9 +226,15 @@ def main():
     if not files: sys.exit("no editions/*.pool.json")
     target = os.path.join(BASE, "editions", f"{sys.argv[1]}.pool.json") if len(sys.argv) > 1 else files[-1]
     pool = json.load(open(target, encoding="utf-8")); day = pool["edition"]
-    pool = fill(pool)
+    market = load_market(pool)
+    pool = fill(apply_market(pool, market_tokens(market)) if market else pool)
+    pool["data_snapshot_at"] = market["prices_as_of"] if market else pool["data_snapshot_at"]
+    now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
+    pool["edition_generated_at"] = pool["generated_at"]; pool["generated_at"] = now
     eds = {f: build(pool, f) for f in FORMATS}
-    bundle = dict(variables=var_block(), generated_at=pool["generated_at"], edition=day, data_snapshot_at=pool["data_snapshot_at"],
+    for ed in eds.values(): ed["prices_as_of"] = market["prices_as_of"] if market else None; ed["market"] = market
+    bundle = dict(variables=var_block(), generated_at=now, edition_generated_at=pool["edition_generated_at"],
+                  prices_as_of=market["prices_as_of"] if market else None, market=market, edition=day, data_snapshot_at=pool["data_snapshot_at"],
                   timezone="America/Los_Angeles", wpm_assumed=WPM, disclaimer=pool["disclaimer"], formats=eds)
     dump = lambda o, p: json.dump(o, open(os.path.join(BASE, p), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     dump(bundle, f"feed-{day}.json")
@@ -171,7 +247,7 @@ def main():
     dump(schedule(), "schedule.json")
     hist = []
     for p in files[-3:][::-1]:
-        pl = fill(json.load(open(p, encoding="utf-8"))); hist.append((pl["edition"], {f: build(pl, f) for f in FORMATS}))
+        pl = json.load(open(p, encoding="utf-8")); mk = load_market(pl); pl = fill(apply_market(pl, market_tokens(mk)) if mk else pl); hist.append((pl["edition"], {f: build(pl, f) for f in FORMATS}))
     open(os.path.join(BASE, "feed.xml"), "w", encoding="utf-8").write(rss(hist))
     for f, ed in eds.items():
         print(f"{f:7s} target {ed['target_words']:5d}  words {ed['word_count']:5d}  ~{ed['est_read_time']}  stories {sum(len(s['stories']) for s in ed['segments'])}")
