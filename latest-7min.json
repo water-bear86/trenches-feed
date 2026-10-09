@@ -1,0 +1,266 @@
+{
+ "variables": {
+  "STATION_NAME": {
+   "token": "{{STATION_NAME}}",
+   "description": "Station name, e.g. as it should be spoken on air",
+   "example": "Example FM",
+   "spoken_word_estimate": 2,
+   "filled": false,
+   "value": null
+  },
+  "ANCHOR_NAME": {
+   "token": "{{ANCHOR_NAME}}",
+   "description": "On-air anchor/host name",
+   "example": "Nova",
+   "spoken_word_estimate": 1,
+   "filled": false,
+   "value": null
+  },
+  "TIME_OF_DAY_GREETING": {
+   "token": "{{TIME_OF_DAY_GREETING}}",
+   "description": "Greeting for playback time: Good morning / Good afternoon / Good evening / Hey night owls",
+   "example": "Good evening",
+   "spoken_word_estimate": 2,
+   "filled": false,
+   "value": null
+  },
+  "TIME_SPOKEN": {
+   "token": "{{TIME_SPOKEN}}",
+   "description": "Playback time as spoken, Pacific, e.g. 'six thirty Pacific'",
+   "example": "six thirty Pacific",
+   "spoken_word_estimate": 3,
+   "filled": false,
+   "value": null
+  }
+ },
+ "format": "7min",
+ "label": "7-minute program",
+ "edition": "2026-10-08",
+ "title": "{{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (7-minute program)",
+ "generated_at": "2026-10-08T18:35:00-07:00",
+ "data_snapshot_at": "2026-10-08T18:13:00-07:00",
+ "target_words": 1050,
+ "word_count": 1008,
+ "est_read_seconds": 403,
+ "est_read_time": "6:43",
+ "wpm_assumed": 150,
+ "disclaimer": "This report is for information only and is not financial advice. Token mentions are news, not recommendations. Memecoin data is unverified.",
+ "intro": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
+ "outro": "Prices quoted are as of about six fifteen Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "segments": [
+  {
+   "id": "trenches",
+   "name": "Memecoin Markets",
+   "intro": "We begin with memecoins, speculative digital tokens often based on internet jokes or personalities.",
+   "stories": [
+    {
+     "id": "2026-10-08-7min-pumpfun-deployers",
+     "segment": "Memecoin Markets",
+     "segment_id": "trenches",
+     "headline": "Pump.fun criticized over data on token creators' earnings",
+     "script_text": "The memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.",
+     "source_urls": [
+      "https://x.com/i/trending/2108248375107658104",
+      "https://x.com/i/trending/2108299036629582056",
+      "https://x.com/i/trending/2107907614981943473"
+     ],
+     "timestamp": "2026-10-09T01:05:14Z",
+     "word_count": 100
+    },
+    {
+     "id": "2026-10-08-7min-pumpfun-pairs",
+     "segment": "Memecoin Markets",
+     "segment_id": "trenches",
+     "headline": "Pump.fun lets new tokens trade against any token launched on the platform",
+     "script_text": "Pump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.",
+     "source_urls": [
+      "https://x.com/i/trending/2108272049940570568",
+      "https://www.coingecko.com/en/coins/pump-fun"
+     ],
+     "timestamp": "2026-10-08T21:49:19Z",
+     "word_count": 74
+    },
+    {
+     "id": "2026-10-08-7min-sol-trending",
+     "segment": "Memecoin Markets",
+     "segment_id": "trenches",
+     "headline": "Newly launched Solana tokens post extreme price swings",
+     "script_text": "Trading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.",
+     "source_urls": [
+      "https://www.geckoterminal.com/solana/pools/Bjhum36bzoYbheRgSpkZLZsttbPBDbJCDoeKA7o9N2o",
+      "https://www.geckoterminal.com/solana/pools/4xp7kN4nVt19caq4kM629vL8vJEqpSFVdZAh27wvYPh8",
+      "https://www.geckoterminal.com/solana/trending_pools",
+      "https://x.com/search?q=tweetcraft"
+     ],
+     "timestamp": "2026-10-09T01:13:00Z",
+     "word_count": 106
+    },
+    {
+     "id": "2026-10-08-7min-drains",
+     "segment": "Memecoin Markets",
+     "segment_id": "trenches",
+     "headline": "Trader reports $4M wallet theft in Singapore; BNB Chain project loses $12.5M",
+     "script_text": "Two security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.",
+     "source_urls": [
+      "https://x.com/i/trending/2107733816207171835",
+      "https://x.com/i/trending/2108154220373581849"
+     ],
+     "timestamp": "2026-10-08T14:40:09Z",
+     "word_count": 97
+    },
+    {
+     "id": "2026-10-08-7min-leverage-degens",
+     "segment": "Memecoin Markets",
+     "segment_id": "trenches",
+     "headline": "High-risk trader returns with large leveraged Bitcoin bet",
+     "script_text": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars, close to where Bitcoin is trading.",
+     "source_urls": [
+      "https://x.com/i/trending/2108193702803804444",
+      "https://x.com/i/trending/2107903670377701822"
+     ],
+     "timestamp": "2026-10-08T13:57:13Z",
+     "word_count": 29
+    }
+   ]
+  },
+  {
+   "id": "broader",
+   "name": "Crypto Markets and Policy",
+   "intro": "Turning now to the wider cryptocurrency market.",
+   "stories": [
+    {
+     "id": "2026-10-08-7min-majors",
+     "segment": "Crypto Markets and Policy",
+     "segment_id": "broader",
+     "headline": "Cryptocurrencies fall; more than $1B in leveraged bets closed",
+     "script_text": "Cryptocurrency prices fell today. Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars this evening, down about two per cent. Ether, the second-largest cryptocurrency, was near twenty-four hundred and seventy-five dollars, down four per cent. Solana fell about six and a half per cent, to roughly one hundred and nine dollars. More than one billion dollars in leveraged trades were forcibly closed over twenty-four hours, most of them bets on rising prices. Traders point to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
+     "source_urls": [
+      "https://www.coingecko.com/",
+      "https://x.com/i/trending/2108045012894433331",
+      "https://x.com/i/trending/2107668599901213099"
+     ],
+     "timestamp": "2026-10-09T01:13:00Z",
+     "word_count": 95
+    },
+    {
+     "id": "2026-10-08-7min-etf-flows",
+     "segment": "Crypto Markets and Policy",
+     "segment_id": "broader",
+     "headline": "Bitcoin funds see largest daily withdrawals in months",
+     "script_text": "Investors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.",
+     "source_urls": [
+      "https://x.com/i/trending/2108063487284900039",
+      "https://farside.co.uk/btc/",
+      "https://x.com/i/trending/2107780814763094166"
+     ],
+     "timestamp": "2026-10-08T15:11:39Z",
+     "word_count": 58
+    },
+    {
+     "id": "2026-10-08-7min-esma-usdt",
+     "segment": "Crypto Markets and Policy",
+     "segment_id": "broader",
+     "headline": "EU regulator orders phase-out of non-compliant stablecoins, including USDT",
+     "script_text": "European regulators are moving against the world's largest stablecoin, a cryptocurrency designed to hold a steady value of one U.S. dollar. The European Securities and Markets Authority issued guidance today telling licensed crypto firms to stop offering services for stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven. New purchases are to stop immediately, with existing holdings wound down under supervision.",
+     "source_urls": [
+      "https://x.com/i/trending/2108165500786426247"
+     ],
+     "timestamp": "2026-10-09T01:03:47Z",
+     "word_count": 67
+    },
+    {
+     "id": "2026-10-08-7min-cftc",
+     "segment": "Crypto Markets and Policy",
+     "segment_id": "broader",
+     "headline": "U.S. CFTC proceeds with crypto trading rules",
+     "script_text": "In the United States, the Commodity Futures Trading Commission is moving ahead with its own rules for cryptocurrency trading while legislation stalls in Congress. Chairman Michael Selig says the proposals would offer exchanges a voluntary path to federal registration. The proposals are now open for sixty days of public comment.",
+     "source_urls": [
+      "https://x.com/i/trending/2107129344044982554",
+      "https://x.com/i/trending/2107869689447682381"
+     ],
+     "timestamp": "2026-10-08T22:25:38Z",
+     "word_count": 50
+    },
+    {
+     "id": "2026-10-08-7min-dip-buyers",
+     "segment": "Crypto Markets and Policy",
+     "segment_id": "broader",
+     "headline": "Strategy and Cardone Capital add to Bitcoin holdings",
+     "script_text": "Strategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.",
+     "source_urls": [
+      "https://x.com/i/trending/2107859404167037006",
+      "https://x.com/i/trending/2108330599295668662"
+     ],
+     "timestamp": "2026-10-08T23:02:59Z",
+     "word_count": 18
+    }
+   ]
+  },
+  {
+   "id": "metas",
+   "name": "Emerging Trends",
+   "intro": "Finally, a look at the themes shaping speculative trading this week.",
+   "stories": [
+    {
+     "id": "2026-10-08-7min-ai-characters",
+     "segment": "Emerging Trends",
+     "segment_id": "metas",
+     "headline": "Tokens based on AI-generated characters draw traders",
+     "script_text": "Tokens built around characters created with artificial intelligence are drawing heavy trading this week. One, Frank Ashford, is based on an AI-generated lookalike of a well-known crypto trader. Its token has a market value of about six hundred and eighty thousand dollars, up about forty-seven per cent today, according to GeckoTerminal. Another, Jean Phil, is a character from videos by the AI company Higgsfield, which released a new short featuring him today. A token named after him is valued at about six point four million dollars, up about a third.",
+     "source_urls": [
+      "https://x.com/WhaleInsider/status/2107493105045844009",
+      "https://x.com/i/trending/2108305878457995444",
+      "https://www.geckoterminal.com/solana/pools/745ATaSSWxvry5qt1XVv9eXuG884hDvNJfvA2o82dNBi",
+      "https://www.geckoterminal.com/solana/pools/4R8CiMnJWDNoes3fQi1ccPFJygPXazaHaWpHrN3rZeNj"
+     ],
+     "timestamp": "2026-10-08T21:24:36Z",
+     "word_count": 90
+    },
+    {
+     "id": "2026-10-08-7min-memestocks",
+     "segment": "Emerging Trends",
+     "segment_id": "metas",
+     "headline": "Tokens linked to company shares gain attention",
+     "script_text": "Another trend combines memecoins with tokenized shares, which are digital versions of company stock traded on blockchains. At the TOKEN2049 conference, Jesse Pollak, who leads Coinbase's Base network, presented examples of such tokens and called tokenized shares the next major growth area for the industry. On Solana, a token called STONK remains among the most traded, with a market value of about one hundred and twenty million dollars.",
+     "source_urls": [
+      "https://x.com/i/trending/2107892114243670355",
+      "https://www.geckoterminal.com/solana/pools/zxTpi4BtaWX3mgdAPoezkMD1hxx8CdeCfrqXMWvSCLX",
+      "https://dexscreener.com/"
+     ],
+     "timestamp": "2026-10-08T08:15:56Z",
+     "word_count": 68
+    },
+    {
+     "id": "2026-10-08-7min-ai-agents",
+     "segment": "Emerging Trends",
+     "segment_id": "metas",
+     "headline": "Research report on AI agents lifts Derive token",
+     "script_text": "A Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.",
+     "source_urls": [
+      "https://x.com/i/trending/2108278826199576730",
+      "https://www.coingecko.com/en/coins/derive",
+      "https://x.com/i/trending/2107456357503054146",
+      "https://x.com/i/trending/2107685371853312390"
+     ],
+     "timestamp": "2026-10-09T00:03:10Z",
+     "word_count": 18
+    },
+    {
+     "id": "2026-10-08-7min-revenue-memes",
+     "segment": "Emerging Trends",
+     "segment_id": "metas",
+     "headline": "Interest grows in memecoins that share revenue",
+     "script_text": "Injective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.",
+     "source_urls": [
+      "https://x.com/i/trending/2108339292808392791",
+      "https://x.com/i/trending/2107574014038147522",
+      "https://x.com/i/trending/2107201161799590185"
+     ],
+     "timestamp": "2026-10-08T23:37:31Z",
+     "word_count": 17
+    }
+   ]
+  }
+ ],
+ "full_script": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.\n\nWe begin with memecoins, speculative digital tokens often based on internet jokes or personalities.\n\nThe memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.\n\nPump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.\n\nTrading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.\n\nTwo security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.\n\nA trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars, close to where Bitcoin is trading.\n\nTurning now to the wider cryptocurrency market.\n\nCryptocurrency prices fell today. Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars this evening, down about two per cent. Ether, the second-largest cryptocurrency, was near twenty-four hundred and seventy-five dollars, down four per cent. Solana fell about six and a half per cent, to roughly one hundred and nine dollars. More than one billion dollars in leveraged trades were forcibly closed over twenty-four hours, most of them bets on rising prices. Traders point to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.\n\nInvestors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.\n\nEuropean regulators are moving against the world's largest stablecoin, a cryptocurrency designed to hold a steady value of one U.S. dollar. The European Securities and Markets Authority issued guidance today telling licensed crypto firms to stop offering services for stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven. New purchases are to stop immediately, with existing holdings wound down under supervision.\n\nIn the United States, the Commodity Futures Trading Commission is moving ahead with its own rules for cryptocurrency trading while legislation stalls in Congress. Chairman Michael Selig says the proposals would offer exchanges a voluntary path to federal registration. The proposals are now open for sixty days of public comment.\n\nStrategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.\n\nFinally, a look at the themes shaping speculative trading this week.\n\nTokens built around characters created with artificial intelligence are drawing heavy trading this week. One, Frank Ashford, is based on an AI-generated lookalike of a well-known crypto trader. Its token has a market value of about six hundred and eighty thousand dollars, up about forty-seven per cent today, according to GeckoTerminal. Another, Jean Phil, is a character from videos by the AI company Higgsfield, which released a new short featuring him today. A token named after him is valued at about six point four million dollars, up about a third.\n\nAnother trend combines memecoins with tokenized shares, which are digital versions of company stock traded on blockchains. At the TOKEN2049 conference, Jesse Pollak, who leads Coinbase's Base network, presented examples of such tokens and called tokenized shares the next major growth area for the industry. On Solana, a token called STONK remains among the most traded, with a market value of about one hundred and twenty million dollars.\n\nA Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.\n\nInjective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.\n\nPrices quoted are as of about six fifteen Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}."
+}
