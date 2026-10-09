@@ -1,7 +1,8 @@
 """Story pool for 2026-10-08, written in public-broadcaster hourly-newscast style (see ../STYLE_GUIDE.md).
 Each story: priority (1 = all formats, 2 = 7/5/2.5-min, 3 = 12-min/filler), text_medium (7-min),
 text_extra (appended for 12-min), text_short (5-min), text_flash (2:30 headline). Facts and sources unchanged
-from the research pass; keep {{VARIABLES}} intact."""
+from the research pass; keep {{VARIABLES}} intact. Market prices are NEVER written as numbers: use the price
+variables ({{BTC_PRICE}}, {{BTC_CHANGE_SPOKEN}}, {{MARKET_DIRECTION}} ...) which the station fills at playback."""
 import json
 X="https://x.com/i/trending/"
 GT="https://www.geckoterminal.com/"
@@ -34,9 +35,9 @@ S("drains","trenches",1,"Trader reports $4M wallet theft in Singapore; BNB Chain
  "A trader reports four million dollars stolen; a separate project loses twelve and a half million.",
  [X+"2107733816207171835",X+"2108154220373581849"],"2026-10-08T14:40:09Z"),
 S("leverage-degens","trenches",2,"High-risk trader returns with large leveraged Bitcoin bet",
- "On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near [[BTC_PRICE]] dollars as of [[PRICES_AS_OF_SPOKEN]]. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.",
+ "On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near {{BTC_PRICE}} dollars as of {{PRICES_AS_OF_SPOKEN}}. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.",
  "Another large trader, known as Machi Big Brother, held a leveraged ether position worth about one hundred million dollars as of yesterday, with a liquidation level near twenty-five hundred dollars. Ether has since traded below that level. The status of that position could not be confirmed.",
- "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near [[BTC_PRICE]] dollars.",
+ "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near {{BTC_PRICE}} dollars.",
  "A trader places a heavily leveraged Bitcoin bet.",
  [X+"2108193702803804444",X+"2107903670377701822"],"2026-10-08T13:57:13Z"),
 S("laptop","trenches",3,"Hunter Biden report blames market makers for LAPTOP token collapse",
@@ -53,11 +54,11 @@ S("bsc-lobster","trenches",3,"Chinese-named token among most active on BNB Chain
  "On BNB Chain, a token named with the Chinese characters for 'lobster' is among the most actively traded, with a market value of about fifty million dollars, up about fifteen per cent, and more than six million dollars in daily trading. The network's memecoin launch service, Four.meme, held promotional events in Singapore during conference week.",
  "","","",[GT+"bsc/trending_pools",X+"2107824439673164105"],"2026-10-09T01:13:00Z"),
 # ---------------- CRYPTO MARKETS & POLICY ----------------
-S("majors","broader",1,"Crypto markets: Bitcoin near [[BTC_PRICE_DIGITS]]",
- "Cryptocurrency prices [[MARKET_MOVE_PAST]] over the past day. As of [[PRICES_AS_OF_SPOKEN]], Bitcoin was trading near [[BTC_PRICE]] U.S. dollars, [[BTC_CHANGE]] over twenty-four hours. Ether, the second-largest cryptocurrency, was near [[ETH_PRICE]] dollars, [[ETH_CHANGE]]. Solana was near [[SOL_PRICE]] dollars, [[SOL_CHANGE]]. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
- "The total value of all cryptocurrencies is about [[TOTAL_MCAP]] dollars, [[TOTAL_MCAP_CHANGE]], according to CoinGecko. Saturday marks one year since a sharp market drop on October tenth, twenty twenty-five, which forced the closure of about nineteen billion dollars in positions, days after Bitcoin reached a record near one hundred and twenty-six thousand dollars.",
- "As of [[PRICES_AS_OF_SPOKEN]], Bitcoin was near [[BTC_PRICE]] U.S. dollars, [[BTC_CHANGE]] over twenty-four hours. Ether was near [[ETH_PRICE]] dollars, [[ETH_CHANGE]], and Solana near [[SOL_PRICE]], [[SOL_CHANGE]]. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
- "Bitcoin is near [[BTC_PRICE]] dollars, [[BTC_CHANGE]] on the day.",
+S("majors","broader",1,"Crypto markets: Bitcoin near {{BTC_PRICE_DIGITS}}",
+ "Cryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day. As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was trading near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether, the second-largest cryptocurrency, was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}. Solana was near {{SOL_PRICE}} dollars, {{SOL_CHANGE_SPOKEN}}. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
+ "The total value of all cryptocurrencies is about {{TOTAL_MARKET_CAP}} dollars, {{TOTAL_MARKET_CAP_CHANGE_SPOKEN}} over twenty-four hours. Saturday marks one year since a sharp market drop on October tenth, twenty twenty-five, which forced the closure of about nineteen billion dollars in positions, days after Bitcoin reached a record near one hundred and twenty-six thousand dollars.",
+ "As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}, and Solana near {{SOL_PRICE}}, {{SOL_CHANGE_SPOKEN}}. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
+ "Bitcoin is near {{BTC_PRICE}} dollars, {{BTC_CHANGE_SPOKEN}} on the day.",
  ["https://www.coingecko.com/",X+"2108045012894433331",X+"2107668599901213099"],"2026-10-09T01:13:00Z"),
 S("etf-flows","broader",1,"Bitcoin funds see largest daily withdrawals in months",
  "Investors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.",
@@ -90,7 +91,7 @@ S("exchange-reserves","broader",3,"Bitcoin held on exchanges falls to seven-mont
  "The amount of Bitcoin held on trading platforms has fallen to about two point six eight million coins, roughly six and a half per cent of the supply, after the largest one-day withdrawal in seven months on Tuesday. Analysts often read this as a sign that holders are moving coins into long-term storage, though it has not always led to higher prices.",
  "","","",[X+"2108079921281356202"],"2026-10-08T10:04:54Z"),
 S("hype-otc","broader",3,"Hyperliquid transfers $330M in tokens to institution",
- "The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near [[HYPE_PRICE]] dollars as of [[PRICES_AS_OF_SPOKEN]], [[HYPE_CHANGE]] over twenty-four hours, according to CoinGecko.",
+ "The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near {{HYPE_PRICE}} dollars as of {{PRICES_AS_OF_SPOKEN}}, {{HYPE_CHANGE_SPOKEN}} over twenty-four hours.",
  "","","",[X+"2108154223439597875","https://www.coingecko.com/en/coins/hyperliquid"],"2026-10-08T13:47:30Z"),
 S("fnb","broader",3,"South African bank opens crypto trading to customers",
  "In South Africa, First National Bank has begun offering cryptocurrency trading to nearly nine million customers through a partnership with the local exchange VALR. Customers can buy Bitcoin, ether, XRP, Solana and USDT, starting from ten rand.",
@@ -134,16 +135,12 @@ pool=dict(edition="2026-10-08",title_base="{{STATION_NAME}} News: Crypto and Dig
  segments=[dict(id="trenches",name="Memecoin Markets",intro="We begin with memecoins, speculative digital tokens often based on internet jokes or personalities."),
            dict(id="broader",name="Crypto Markets and Policy",intro="Turning now to the wider cryptocurrency market."),
            dict(id="metas",name="Emerging Trends",intro="Finally, a look at the themes shaping speculative trading this week.")],
- intro_long="{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices [[MARKET_MOVE_PRESENT]], with Bitcoin near [[BTC_PRICE]] dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
+ intro_long="{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices {{MARKET_DIRECTION}}, with Bitcoin near {{BTC_PRICE}} dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
  intro_short="{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.",
  intro_flash="It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}.",
- outro_long="Prices quoted are as of [[PRICES_AS_OF_SPOKEN]] and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- outro_short="Prices are as of [[PRICES_AS_OF_SPOKEN]]. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ outro_long="Prices quoted are as of {{PRICES_AS_OF_SPOKEN}} and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ outro_short="Prices are as of {{PRICES_AS_OF_SPOKEN}}. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
  outro_flash="That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- market_snapshot=dict(prices_as_of="2026-10-08T18:13:00-07:00", source="coingecko",
-   assets=dict(BTC=dict(usd=81701,change_24h_pct=-2.04),ETH=dict(usd=2474.07,change_24h_pct=-4.18),
-               SOL=dict(usd=109.06,change_24h_pct=-6.48),HYPE=dict(usd=84.32,change_24h_pct=-4.91)),
-   **{"global":dict(total_mcap_usd=2776352738348,total_mcap_change_24h_pct=-5.16)}),
  stories=stories)
 json.dump(pool,open(__file__.replace("_make_pool_","").replace(".py",".pool.json"),"w"),indent=1,ensure_ascii=False)
 print(len(stories))

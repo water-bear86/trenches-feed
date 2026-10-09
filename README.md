@@ -10,7 +10,7 @@ Station usage: at each slot, look up the format in `schedule.json`, GET `latest-
 variables, and read `full_script` (or `segments[].stories[]`).
 
 ## Template variables (left unfilled; listed in the `variables` object of every JSON)
-`{{STATION_NAME}}`, `{{ANCHOR_NAME}}`, `{{TIME_OF_DAY_GREETING}}`, `{{TIME_SPOKEN}}`.
+Station/clock: `{{STATION_NAME}}`, `{{ANCHOR_NAME}}`, `{{TIME_OF_DAY_GREETING}}`, `{{TIME_SPOKEN}}`. Market: see "Prices and market figures" below.
 Optional pre-fill at render: `STATION_NAME="Example FM" ANCHOR_NAME="Alex" python3 render_feed.py`. Word counts include an estimate for each variable.
 
 ## Style
@@ -25,14 +25,27 @@ All copy follows `STYLE_GUIDE.md`: a public-broadcaster hourly newscast (neutral
 
 Not financial advice. Memecoin data is unverified.
 
-## Price-only updates (between research editions)
-- Hourly full research runs at :55 PT (separate job) and publishes with `publish.sh` (which `git pull --rebase`s first).
-- `.github/workflows/prices.yml` runs `update_prices.py` at :10, :25 and :40 each hour (plus manual dispatch). It fetches BTC/ETH/SOL
-  (+HYPE, total market cap) from CoinGecko, falling back to Coinbase then Kraken, writes `market.json`, and re-renders.
-  Only `[[MARKET]]` tokens in the pool change (price sentences, market headline, "prices as of" time); story text is untouched.
-  If all APIs fail, nothing changes and the job still succeeds. Commits only when something changed, then deploys Pages.
-- `.github/workflows/pages.yml` deploys Pages on every push from the box.
-- Writing pools: put market numbers ONLY as tokens: `[[BTC_PRICE]] [[BTC_CHANGE]] [[ETH_PRICE]] [[ETH_CHANGE]] [[SOL_PRICE]] [[SOL_CHANGE]]
-  [[HYPE_PRICE]] [[HYPE_CHANGE]] [[TOTAL_MCAP]] [[TOTAL_MCAP_CHANGE]] [[MARKET_MOVE_PAST]] [[MARKET_MOVE_PRESENT]] [[PRICES_AS_OF_SPOKEN]] [[BTC_PRICE_DIGITS]]`,
-  and include a `market_snapshot` (see editions/_make_pool_2026-10-08.py). JSON outputs carry `prices_as_of` and a `market` object.
-- GitHub may delay scheduled Actions by several minutes at busy times.
+## Prices and market figures: filled by the station
+All live market figures are UNFILLED template variables in every published output (md, latest*.json, feed.xml), in the same
+`{{DOUBLE_BRACE}}` style as `{{STATION_NAME}}`. The station substitutes them at playback from its own data (e.g. Pyth feeds via Helius RPC).
+Full definitions (description, format, example, source hint, spoken-length estimate) are in the top-level `variables` object of
+`latest.json` and every `latest-<fmt>.json`.
+
+| Variable | Format | Example |
+|---|---|---|
+| `{{PRICES_AS_OF_SPOKEN}}` | spoken words | six twenty-nine Pacific time |
+| `{{MARKET_DIRECTION}}` | fall / rise / are mixed / hold steady | fall |
+| `{{MARKET_DIRECTION_PAST}}` | fell / rose / were mixed / held steady | fell |
+| `{{BTC_PRICE}}` `{{ETH_PRICE}}` `{{SOL_PRICE}}` `{{HYPE_PRICE}}` | spoken words (BTC to nearest 100, ETH to 5, others whole dollars; script says "dollars") | eighty-one thousand seven hundred |
+| `{{BTC_CHANGE_SPOKEN}}` (and ETH/SOL/HYPE) | spoken phrase incl. direction | down about two per cent / up about one and a half per cent / little changed |
+| `{{BTC_CHANGE_PCT}}` (and ETH/SOL/HYPE) | digits, signed, 1 decimal (machine field, not read aloud) | -2.0 |
+| `{{BTC_PRICE_DIGITS}}` | digits for written headline | $81,700 |
+| `{{TOTAL_MARKET_CAP}}` | spoken words (script says "dollars") | two point seven eight trillion |
+| `{{TOTAL_MARKET_CAP_CHANGE_SPOKEN}}` | spoken phrase incl. direction | down about five per cent |
+
+Story-specific figures from research (e.g. a token's reported gain, a trader's liquidation level, ETF flow totals) stay as attributed text and refresh with each hourly research edition.
+
+- `render_feed.py` and `publish.sh` never fill prices (env pre-fill only applies to STATION_NAME, ANCHOR_NAME, TIME_OF_DAY_GREETING, TIME_SPOKEN).
+- `update_prices.py` is an optional local helper: it prints example values for every market variable from public APIs (CoinGecko, falling back to Coinbase, then Kraken) to test the station's substitution. It never touches published files.
+- The `price-update` workflow is disabled and has no schedule. `pages.yml` deploys Pages on every push.
+- Hourly research runs at :55 PT (separate job) and publishes with `publish.sh` (which `git pull --rebase`s first).

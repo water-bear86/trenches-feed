@@ -22,38 +22,12 @@
    "intro": "Finally, a look at the themes shaping speculative trading this week."
   }
  ],
- "intro_long": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices [[MARKET_MOVE_PRESENT]], with Bitcoin near [[BTC_PRICE]] dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
+ "intro_long": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices {{MARKET_DIRECTION}}, with Bitcoin near {{BTC_PRICE}} dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
  "intro_short": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. This report is not financial advice.",
  "intro_flash": "It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}.",
- "outro_long": "Prices quoted are as of [[PRICES_AS_OF_SPOKEN]] and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- "outro_short": "Prices are as of [[PRICES_AS_OF_SPOKEN]]. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "outro_long": "Prices quoted are as of {{PRICES_AS_OF_SPOKEN}} and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "outro_short": "Prices are as of {{PRICES_AS_OF_SPOKEN}}. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
  "outro_flash": "That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- "market_snapshot": {
-  "prices_as_of": "2026-10-08T18:13:00-07:00",
-  "source": "coingecko",
-  "assets": {
-   "BTC": {
-    "usd": 81701,
-    "change_24h_pct": -2.04
-   },
-   "ETH": {
-    "usd": 2474.07,
-    "change_24h_pct": -4.18
-   },
-   "SOL": {
-    "usd": 109.06,
-    "change_24h_pct": -6.48
-   },
-   "HYPE": {
-    "usd": 84.32,
-    "change_24h_pct": -4.91
-   }
-  },
-  "global": {
-   "total_mcap_usd": 2776352738348,
-   "total_mcap_change_24h_pct": -5.16
-  }
- },
  "stories": [
   {
    "id": "pumpfun-deployers",
@@ -123,9 +97,9 @@
    "segment": "trenches",
    "priority": 2,
    "headline": "High-risk trader returns with large leveraged Bitcoin bet",
-   "text_medium": "On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near [[BTC_PRICE]] dollars as of [[PRICES_AS_OF_SPOKEN]]. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.",
+   "text_medium": "On the trading platform Hyperliquid, a trader known as AguilaTrades has opened a new bet on Bitcoin using forty times leverage, meaning borrowed money magnifies both gains and losses. The position covers two hundred bitcoin, bought near eighty-two thousand nine hundred dollars, and would be forcibly closed, or liquidated, at about eighty-one thousand five hundred. Bitcoin was trading near {{BTC_PRICE}} dollars as of {{PRICES_AS_OF_SPOKEN}}. The same trader has been liquidated thirty-three times before, with losses of about thirty-seven million dollars.",
    "text_extra": "Another large trader, known as Machi Big Brother, held a leveraged ether position worth about one hundred million dollars as of yesterday, with a liquidation level near twenty-five hundred dollars. Ether has since traded below that level. The status of that position could not be confirmed.",
-   "text_short": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near [[BTC_PRICE]] dollars.",
+   "text_short": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near {{BTC_PRICE}} dollars.",
    "text_flash": "A trader places a heavily leveraged Bitcoin bet.",
    "source_urls": [
     "https://x.com/i/trending/2108193702803804444",
@@ -195,11 +169,11 @@
    "id": "majors",
    "segment": "broader",
    "priority": 1,
-   "headline": "Crypto markets: Bitcoin near [[BTC_PRICE_DIGITS]]",
-   "text_medium": "Cryptocurrency prices [[MARKET_MOVE_PAST]] over the past day. As of [[PRICES_AS_OF_SPOKEN]], Bitcoin was trading near [[BTC_PRICE]] U.S. dollars, [[BTC_CHANGE]] over twenty-four hours. Ether, the second-largest cryptocurrency, was near [[ETH_PRICE]] dollars, [[ETH_CHANGE]]. Solana was near [[SOL_PRICE]] dollars, [[SOL_CHANGE]]. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
-   "text_extra": "The total value of all cryptocurrencies is about [[TOTAL_MCAP]] dollars, [[TOTAL_MCAP_CHANGE]], according to CoinGecko. Saturday marks one year since a sharp market drop on October tenth, twenty twenty-five, which forced the closure of about nineteen billion dollars in positions, days after Bitcoin reached a record near one hundred and twenty-six thousand dollars.",
-   "text_short": "As of [[PRICES_AS_OF_SPOKEN]], Bitcoin was near [[BTC_PRICE]] U.S. dollars, [[BTC_CHANGE]] over twenty-four hours. Ether was near [[ETH_PRICE]] dollars, [[ETH_CHANGE]], and Solana near [[SOL_PRICE]], [[SOL_CHANGE]]. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
-   "text_flash": "Bitcoin is near [[BTC_PRICE]] dollars, [[BTC_CHANGE]] on the day.",
+   "headline": "Crypto markets: Bitcoin near {{BTC_PRICE_DIGITS}}",
+   "text_medium": "Cryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day. As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was trading near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether, the second-largest cryptocurrency, was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}. Solana was near {{SOL_PRICE}} dollars, {{SOL_CHANGE_SPOKEN}}. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
+   "text_extra": "The total value of all cryptocurrencies is about {{TOTAL_MARKET_CAP}} dollars, {{TOTAL_MARKET_CAP_CHANGE_SPOKEN}} over twenty-four hours. Saturday marks one year since a sharp market drop on October tenth, twenty twenty-five, which forced the closure of about nineteen billion dollars in positions, days after Bitcoin reached a record near one hundred and twenty-six thousand dollars.",
+   "text_short": "As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}, and Solana near {{SOL_PRICE}}, {{SOL_CHANGE_SPOKEN}}. More than a billion dollars in leveraged trades were forcibly closed earlier today.",
+   "text_flash": "Bitcoin is near {{BTC_PRICE}} dollars, {{BTC_CHANGE_SPOKEN}} on the day.",
    "source_urls": [
     "https://www.coingecko.com/",
     "https://x.com/i/trending/2108045012894433331",
@@ -300,7 +274,7 @@
    "segment": "broader",
    "priority": 3,
    "headline": "Hyperliquid transfers $330M in tokens to institution",
-   "text_medium": "The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near [[HYPE_PRICE]] dollars as of [[PRICES_AS_OF_SPOKEN]], [[HYPE_CHANGE]] over twenty-four hours, according to CoinGecko.",
+   "text_medium": "The developer of the Hyperliquid trading platform transferred three point seven five million of its HYPE tokens, worth about three hundred and thirty million dollars, to an unnamed institution in a private sale outside public markets. HYPE was trading near {{HYPE_PRICE}} dollars as of {{PRICES_AS_OF_SPOKEN}}, {{HYPE_CHANGE_SPOKEN}} over twenty-four hours.",
    "text_extra": "",
    "text_short": "",
    "text_flash": "",

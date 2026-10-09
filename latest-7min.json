@@ -2,7 +2,8 @@
  "variables": {
   "STATION_NAME": {
    "token": "{{STATION_NAME}}",
-   "description": "Station name, e.g. as it should be spoken on air",
+   "description": "Station name as spoken on air",
+   "format": "spoken words",
    "example": "Example FM",
    "spoken_word_estimate": 2,
    "filled": false,
@@ -11,14 +12,16 @@
   "ANCHOR_NAME": {
    "token": "{{ANCHOR_NAME}}",
    "description": "On-air anchor/host name",
-   "example": "Nova",
-   "spoken_word_estimate": 1,
+   "format": "spoken words",
+   "example": "Alex Morgan",
+   "spoken_word_estimate": 2,
    "filled": false,
    "value": null
   },
   "TIME_OF_DAY_GREETING": {
    "token": "{{TIME_OF_DAY_GREETING}}",
-   "description": "Greeting for playback time: Good morning / Good afternoon / Good evening / Hey night owls",
+   "description": "Greeting for playback time",
+   "format": "spoken words, sentence case",
    "example": "Good evening",
    "spoken_word_estimate": 2,
    "filled": false,
@@ -26,9 +29,194 @@
   },
   "TIME_SPOKEN": {
    "token": "{{TIME_SPOKEN}}",
-   "description": "Playback time as spoken, Pacific, e.g. 'six thirty Pacific'",
-   "example": "six thirty Pacific",
-   "spoken_word_estimate": 3,
+   "description": "Playback time, Pacific",
+   "format": "spoken words",
+   "example": "six thirty Pacific time",
+   "spoken_word_estimate": 4,
+   "filled": false,
+   "value": null
+  },
+  "PRICES_AS_OF_SPOKEN": {
+   "token": "{{PRICES_AS_OF_SPOKEN}}",
+   "description": "Time the station's price snapshot was taken",
+   "format": "spoken words",
+   "example": "six twenty-nine Pacific time",
+   "spoken_word_estimate": 4,
+   "source_hint": "timestamp of the price read",
+   "filled": false,
+   "value": null
+  },
+  "MARKET_DIRECTION": {
+   "token": "{{MARKET_DIRECTION}}",
+   "description": "Present-tense verb phrase for BTC/ETH/SOL overall 24h move (used in headline tease: 'Cryptocurrency prices {{MARKET_DIRECTION}}')",
+   "format": "one of: 'fall' | 'rise' | 'are mixed' | 'hold steady'",
+   "example": "fall",
+   "spoken_word_estimate": 1,
+   "source_hint": "derive from BTC/ETH/SOL 24h changes (all <= -0.5% fall; all >= +0.5% rise; all within +/-0.5% hold steady; else are mixed)",
+   "filled": false,
+   "value": null
+  },
+  "MARKET_DIRECTION_PAST": {
+   "token": "{{MARKET_DIRECTION_PAST}}",
+   "description": "Past-tense form of MARKET_DIRECTION ('Cryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day')",
+   "format": "one of: 'fell' | 'rose' | 'were mixed' | 'held steady'",
+   "example": "fell",
+   "spoken_word_estimate": 1,
+   "source_hint": "same rule as MARKET_DIRECTION",
+   "filled": false,
+   "value": null
+  },
+  "BTC_PRICE": {
+   "token": "{{BTC_PRICE}}",
+   "description": "Bitcoin price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'",
+   "format": "spoken words",
+   "example": "eighty-one thousand seven hundred",
+   "spoken_word_estimate": 4,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD",
+   "filled": false,
+   "value": null
+  },
+  "BTC_CHANGE_SPOKEN": {
+   "token": "{{BTC_CHANGE_SPOKEN}}",
+   "description": "Bitcoin 24h change as a spoken phrase including direction (Canadian 'per cent')",
+   "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'",
+   "example": "down about two per cent",
+   "spoken_word_estimate": 5,
+   "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth BTC / USD (current vs. 24h-ago price)",
+   "filled": false,
+   "value": null
+  },
+  "BTC_CHANGE_PCT": {
+   "token": "{{BTC_CHANGE_PCT}}",
+   "description": "Bitcoin 24h change, numeric (machine field; not read in scripts)",
+   "format": "digits, signed, one decimal",
+   "example": "-2.0",
+   "spoken_word_estimate": 0,
+   "used_in_scripts": false,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD",
+   "filled": false,
+   "value": null
+  },
+  "BTC_PRICE_DIGITS": {
+   "token": "{{BTC_PRICE_DIGITS}}",
+   "description": "Bitcoin price for written headlines (not spoken)",
+   "format": "digits with $ and commas, rounded to nearest 100",
+   "example": "$81,700",
+   "spoken_word_estimate": 2,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD",
+   "filled": false,
+   "value": null
+  },
+  "ETH_PRICE": {
+   "token": "{{ETH_PRICE}}",
+   "description": "Ether price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'",
+   "format": "spoken words",
+   "example": "two thousand four hundred and seventy-five",
+   "spoken_word_estimate": 6,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth ETH / USD",
+   "filled": false,
+   "value": null
+  },
+  "ETH_CHANGE_SPOKEN": {
+   "token": "{{ETH_CHANGE_SPOKEN}}",
+   "description": "Ether 24h change as a spoken phrase including direction (Canadian 'per cent')",
+   "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'",
+   "example": "down about four per cent",
+   "spoken_word_estimate": 5,
+   "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth ETH / USD (current vs. 24h-ago price)",
+   "filled": false,
+   "value": null
+  },
+  "ETH_CHANGE_PCT": {
+   "token": "{{ETH_CHANGE_PCT}}",
+   "description": "Ether 24h change, numeric (machine field; not read in scripts)",
+   "format": "digits, signed, one decimal",
+   "example": "-4.2",
+   "spoken_word_estimate": 0,
+   "used_in_scripts": false,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth ETH / USD",
+   "filled": false,
+   "value": null
+  },
+  "SOL_PRICE": {
+   "token": "{{SOL_PRICE}}",
+   "description": "Solana price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'",
+   "format": "spoken words",
+   "example": "one hundred and nine",
+   "spoken_word_estimate": 4,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth SOL / USD",
+   "filled": false,
+   "value": null
+  },
+  "SOL_CHANGE_SPOKEN": {
+   "token": "{{SOL_CHANGE_SPOKEN}}",
+   "description": "Solana 24h change as a spoken phrase including direction (Canadian 'per cent')",
+   "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'",
+   "example": "down about six and a half per cent",
+   "spoken_word_estimate": 8,
+   "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth SOL / USD (current vs. 24h-ago price)",
+   "filled": false,
+   "value": null
+  },
+  "SOL_CHANGE_PCT": {
+   "token": "{{SOL_CHANGE_PCT}}",
+   "description": "Solana 24h change, numeric (machine field; not read in scripts)",
+   "format": "digits, signed, one decimal",
+   "example": "-6.5",
+   "spoken_word_estimate": 0,
+   "used_in_scripts": false,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth SOL / USD",
+   "filled": false,
+   "value": null
+  },
+  "HYPE_PRICE": {
+   "token": "{{HYPE_PRICE}}",
+   "description": "Hyperliquid (HYPE) price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'",
+   "format": "spoken words",
+   "example": "eighty-four",
+   "spoken_word_estimate": 1,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth HYPE / USD",
+   "filled": false,
+   "value": null
+  },
+  "HYPE_CHANGE_SPOKEN": {
+   "token": "{{HYPE_CHANGE_SPOKEN}}",
+   "description": "Hyperliquid (HYPE) 24h change as a spoken phrase including direction (Canadian 'per cent')",
+   "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'",
+   "example": "down about five per cent",
+   "spoken_word_estimate": 5,
+   "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth HYPE / USD (current vs. 24h-ago price)",
+   "filled": false,
+   "value": null
+  },
+  "HYPE_CHANGE_PCT": {
+   "token": "{{HYPE_CHANGE_PCT}}",
+   "description": "Hyperliquid (HYPE) 24h change, numeric (machine field; not read in scripts)",
+   "format": "digits, signed, one decimal",
+   "example": "-4.9",
+   "spoken_word_estimate": 0,
+   "used_in_scripts": false,
+   "source_hint": "Price feeds via Helius RPC, e.g. Pyth HYPE / USD",
+   "filled": false,
+   "value": null
+  },
+  "TOTAL_MARKET_CAP": {
+   "token": "{{TOTAL_MARKET_CAP}}",
+   "description": "Total value of all cryptocurrencies in U.S. dollars; script supplies the word 'dollars'",
+   "format": "spoken words",
+   "example": "two point seven eight trillion",
+   "spoken_word_estimate": 5,
+   "source_hint": "not available from Pyth/Helius; use an aggregator (e.g. CoinGecko /global) or drop the 12-min sentence",
+   "filled": false,
+   "value": null
+  },
+  "TOTAL_MARKET_CAP_CHANGE_SPOKEN": {
+   "token": "{{TOTAL_MARKET_CAP_CHANGE_SPOKEN}}",
+   "description": "24h change of total crypto market value",
+   "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'",
+   "example": "down about five per cent",
+   "spoken_word_estimate": 4,
+   "source_hint": "same as TOTAL_MARKET_CAP",
    "filled": false,
    "value": null
   }
@@ -37,16 +225,16 @@
  "label": "7-minute program",
  "edition": "2026-10-08",
  "title": "{{STATION_NAME}} News: Crypto and Digital Markets, Thursday, October 8, 2026 (7-minute program)",
- "generated_at": "2026-10-08T18:27:23-07:00",
- "data_snapshot_at": "2026-10-08T18:27:23-07:00",
+ "generated_at": "2026-10-08T18:37:13-07:00",
+ "data_snapshot_at": "2026-10-08T18:13:00-07:00",
  "target_words": 1050,
- "word_count": 1022,
- "est_read_seconds": 409,
- "est_read_time": "6:49",
+ "word_count": 1028,
+ "est_read_seconds": 411,
+ "est_read_time": "6:51",
  "wpm_assumed": 150,
  "disclaimer": "This report is for information only and is not financial advice. Token mentions are news, not recommendations. Memecoin data is unverified.",
- "intro": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
- "outro": "Prices quoted are as of six twenty-seven Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "intro": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices {{MARKET_DIRECTION}}, with Bitcoin near {{BTC_PRICE}} dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.",
+ "outro": "Prices quoted are as of {{PRICES_AS_OF_SPOKEN}} and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
  "segments": [
   {
    "id": "trenches",
@@ -113,13 +301,13 @@
      "segment": "Memecoin Markets",
      "segment_id": "trenches",
      "headline": "High-risk trader returns with large leveraged Bitcoin bet",
-     "script_text": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand seven hundred dollars.",
+     "script_text": "A trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near {{BTC_PRICE}} dollars.",
      "source_urls": [
       "https://x.com/i/trending/2108193702803804444",
       "https://x.com/i/trending/2107903670377701822"
      ],
      "timestamp": "2026-10-08T13:57:13Z",
-     "word_count": 32
+     "word_count": 29
     }
    ]
   },
@@ -132,15 +320,15 @@
      "id": "2026-10-08-7min-majors",
      "segment": "Crypto Markets and Policy",
      "segment_id": "broader",
-     "headline": "Crypto markets: Bitcoin near $81,700",
-     "script_text": "Cryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
+     "headline": "Crypto markets: Bitcoin near {{BTC_PRICE_DIGITS}}",
+     "script_text": "Cryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day. As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was trading near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether, the second-largest cryptocurrency, was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}. Solana was near {{SOL_PRICE}} dollars, {{SOL_CHANGE_SPOKEN}}. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.",
      "source_urls": [
       "https://www.coingecko.com/",
       "https://x.com/i/trending/2108045012894433331",
       "https://x.com/i/trending/2107668599901213099"
      ],
      "timestamp": "2026-10-09T01:13:00Z",
-     "word_count": 107
+     "word_count": 81
     },
     {
      "id": "2026-10-08-7min-etf-flows",
@@ -262,32 +450,7 @@
    ]
   }
  ],
- "full_script": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices fall, with Bitcoin near eighty-one thousand seven hundred dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.\n\nWe begin with memecoins, speculative digital tokens often based on internet jokes or personalities.\n\nThe memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.\n\nPump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.\n\nTrading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.\n\nTwo security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.\n\nA trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near eighty-one thousand seven hundred dollars.\n\nTurning now to the wider cryptocurrency market.\n\nCryptocurrency prices fell over the past day. As of six twenty-seven Pacific time, Bitcoin was trading near eighty-one thousand seven hundred U.S. dollars, down about two per cent over twenty-four hours. Ether, the second-largest cryptocurrency, was near two thousand four hundred and seventy-five dollars, down about four per cent. Solana was near one hundred and nine dollars, down about six per cent. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.\n\nInvestors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.\n\nEuropean regulators are moving against the world's largest stablecoin, a cryptocurrency designed to hold a steady value of one U.S. dollar. The European Securities and Markets Authority issued guidance today telling licensed crypto firms to stop offering services for stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven. New purchases are to stop immediately, with existing holdings wound down under supervision.\n\nIn the United States, the Commodity Futures Trading Commission is moving ahead with its own rules for cryptocurrency trading while legislation stalls in Congress. Chairman Michael Selig says the proposals would offer exchanges a voluntary path to federal registration. The proposals are now open for sixty days of public comment.\n\nStrategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.\n\nFinally, a look at the themes shaping speculative trading this week.\n\nTokens built around characters created with artificial intelligence are drawing heavy trading this week. One, Frank Ashford, is based on an AI-generated lookalike of a well-known crypto trader. Its token has a market value of about six hundred and eighty thousand dollars, up about forty-seven per cent today, according to GeckoTerminal. Another, Jean Phil, is a character from videos by the AI company Higgsfield, which released a new short featuring him today. A token named after him is valued at about six point four million dollars, up about a third.\n\nAnother trend combines memecoins with tokenized shares, which are digital versions of company stock traded on blockchains. At the TOKEN2049 conference, Jesse Pollak, who leads Coinbase's Base network, presented examples of such tokens and called tokenized shares the next major growth area for the industry. On Solana, a token called STONK remains among the most traded, with a market value of about one hundred and twenty million dollars.\n\nA Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.\n\nInjective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.\n\nPrices quoted are as of six twenty-seven Pacific time and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
- "prices_as_of": "2026-10-08T18:27:23-07:00",
- "market": {
-  "source": "coingecko",
-  "assets": {
-   "BTC": {
-    "usd": 81687,
-    "change_24h_pct": -1.8
-   },
-   "ETH": {
-    "usd": 2473.28,
-    "change_24h_pct": -4.02
-   },
-   "SOL": {
-    "usd": 109.07,
-    "change_24h_pct": -6.23
-   },
-   "HYPE": {
-    "usd": 84.44,
-    "change_24h_pct": -4.76
-   }
-  },
-  "global": {
-   "total_mcap_usd": 2770713998054.3936,
-   "total_mcap_change_24h_pct": -5.26
-  },
-  "prices_as_of": "2026-10-08T18:27:23-07:00"
- }
+ "full_script": "{{TIME_OF_DAY_GREETING}}. It's {{TIME_SPOKEN}}. This is {{STATION_NAME}} News. I'm {{ANCHOR_NAME}}. Cryptocurrency prices {{MARKET_DIRECTION}}, with Bitcoin near {{BTC_PRICE}} dollars. European regulators order the stablecoin USDT phased out of licensed platforms. And the memecoin platform Pump.fun faces criticism over how much its top token creators earn. This report is for information only and is not financial advice.\n\nWe begin with memecoins, speculative digital tokens often based on internet jokes or personalities.\n\nThe memecoin launch platform Pump.fun is facing criticism online after figures circulated suggesting its most active token creators have earned large sums while most tokens lose nearly all their value. According to the figures, shared by several crypto commentators, the top twenty-five creators launched about seven hundred and seventy thousand tokens and earned roughly one hundred and twenty-eight million dollars. Only six of those tokens reached a market value of twenty million dollars. Some users are calling for a boycott. A widely shared quote attributing the criticism to Ethereum co-founder Vitalik Buterin could not be traced to any original statement.\n\nPump.fun also announced a change to how new tokens trade. Creators can now pair a new token against any token already launched on the platform, rather than only a short list of approved assets. The company says purchases of a new token will be routed through the token it is paired with, adding demand for that token. Pump.fun's own token, PUMP, was down about eleven per cent over the past day, according to CoinGecko.\n\nTrading data show the extreme volatility of newly created tokens on the Solana blockchain. According to the market-data site GeckoTerminal, a token called TikTok, created just before noon Pacific time today, has risen more than sixteen hundred per cent, to a market value of about six hundred and eighty thousand dollars. Another, BORDR, is up about seventeen hundred per cent. A third, swordinu, traded about five million dollars' worth in a day and has lost ninety-nine point nine per cent of its value. Separately, a token called TWEETCRAFT doubled in price after dozens of accounts posted near-identical promotional messages, a pattern often associated with co-ordinated promotion.\n\nTwo security incidents are drawing attention. A cryptocurrency trader known online as Frogman says about four million dollars was taken from two of his digital wallets in the early morning during the TOKEN2049 industry conference in Singapore. He says the funds were then moved through privacy services that make them harder to trace. Separately, on the BNB Chain network, an administrator account for a project called 79thVault used special permissions to withdraw about twelve and a half million dollars from a trading pool. Negotiations over a reward for returning the funds are reported to be under way.\n\nA trader known as AguilaTrades has placed a forty-times-leveraged bet on Bitcoin that would be forcibly closed near eighty-one thousand five hundred dollars. Bitcoin is currently near {{BTC_PRICE}} dollars.\n\nTurning now to the wider cryptocurrency market.\n\nCryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day. As of {{PRICES_AS_OF_SPOKEN}}, Bitcoin was trading near {{BTC_PRICE}} U.S. dollars, {{BTC_CHANGE_SPOKEN}} over twenty-four hours. Ether, the second-largest cryptocurrency, was near {{ETH_PRICE}} dollars, {{ETH_CHANGE_SPOKEN}}. Solana was near {{SOL_PRICE}} dollars, {{SOL_CHANGE_SPOKEN}}. Earlier today, more than one billion dollars in leveraged trades were forcibly closed within twenty-four hours, most of them bets on rising prices. Traders pointed to comments on Iran, higher oil prices and bond yields, and expectations the U.S. Federal Reserve will keep policy tight.\n\nInvestors pulled about four hundred and eighty-five million dollars from U.S. Bitcoin exchange-traded funds on Tuesday, October seventh, according to data from Farside Investors. These funds trade on stock exchanges and hold Bitcoin directly. BlackRock's fund accounted for about two hundred and eight million dollars of the outflow. It was the largest single day of withdrawals in months.\n\nEuropean regulators are moving against the world's largest stablecoin, a cryptocurrency designed to hold a steady value of one U.S. dollar. The European Securities and Markets Authority issued guidance today telling licensed crypto firms to stop offering services for stablecoins that do not meet EU rules, including Tether's USDT, by January eighth, twenty twenty-seven. New purchases are to stop immediately, with existing holdings wound down under supervision.\n\nIn the United States, the Commodity Futures Trading Commission is moving ahead with its own rules for cryptocurrency trading while legislation stalls in Congress. Chairman Michael Selig says the proposals would offer exchanges a voluntary path to federal registration. The proposals are now open for sixty days of public comment.\n\nStrategy now holds a record eight hundred and forty-eight thousand bitcoin, and Cardone Capital bought forty more today.\n\nFinally, a look at the themes shaping speculative trading this week.\n\nTokens built around characters created with artificial intelligence are drawing heavy trading this week. One, Frank Ashford, is based on an AI-generated lookalike of a well-known crypto trader. Its token has a market value of about six hundred and eighty thousand dollars, up about forty-seven per cent today, according to GeckoTerminal. Another, Jean Phil, is a character from videos by the AI company Higgsfield, which released a new short featuring him today. A token named after him is valued at about six point four million dollars, up about a third.\n\nAnother trend combines memecoins with tokenized shares, which are digital versions of company stock traded on blockchains. At the TOKEN2049 conference, Jesse Pollak, who leads Coinbase's Base network, presented examples of such tokens and called tokenized shares the next major growth area for the industry. On Solana, a token called STONK remains among the most traded, with a market value of about one hundred and twenty million dollars.\n\nA Citrini Research report on AI agents and crypto helped lift Derive's token about twenty-four per cent today.\n\nInjective's community fund bought ten per cent of NinjaCat, a Solana memecoin that shares revenue with holders.\n\nPrices quoted are as of {{PRICES_AS_OF_SPOKEN}} and can change quickly. This report is not financial advice. That's the news for this hour. I'm {{ANCHOR_NAME}}.",
+ "prices_as_of": "{{PRICES_AS_OF_SPOKEN}}",
+ "prices_filled_by": "station"
 }

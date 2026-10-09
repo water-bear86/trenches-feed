@@ -28,14 +28,35 @@ FORMATS = {  # name: (target words, label, max priority, text style, intro style
     "2.5min": (375, "2-minute-30 flash (headlines + top briefs)", 2, "flash", "flash"),
 }
 wc = lambda s: len(s.split())
-VARIABLES = {  # template variables left in scripts for the station to substitute at playback
-    "STATION_NAME": {"token": "{{STATION_NAME}}", "description": "Station name, e.g. as it should be spoken on air", "example": "Example FM", "spoken_word_estimate": 2},
-    "ANCHOR_NAME": {"token": "{{ANCHOR_NAME}}", "description": "On-air anchor/host name", "example": "Nova", "spoken_word_estimate": 1},
-    "TIME_OF_DAY_GREETING": {"token": "{{TIME_OF_DAY_GREETING}}", "description": "Greeting for playback time: Good morning / Good afternoon / Good evening / Hey night owls", "example": "Good evening", "spoken_word_estimate": 2},
-    "TIME_SPOKEN": {"token": "{{TIME_SPOKEN}}", "description": "Playback time as spoken, Pacific, e.g. 'six thirty Pacific'", "example": "six thirty Pacific", "spoken_word_estimate": 3},
+VARIABLES = {  # template variables left UNFILLED in every published output; the station substitutes them at playback
+    # --- station / clock ---
+    "STATION_NAME": {"description": "Station name as spoken on air", "format": "spoken words", "example": "Example FM", "spoken_word_estimate": 2},
+    "ANCHOR_NAME": {"description": "On-air anchor/host name", "format": "spoken words", "example": "Alex Morgan", "spoken_word_estimate": 2},
+    "TIME_OF_DAY_GREETING": {"description": "Greeting for playback time", "format": "spoken words, sentence case", "example": "Good evening", "spoken_word_estimate": 2},
+    "TIME_SPOKEN": {"description": "Playback time, Pacific", "format": "spoken words", "example": "six thirty Pacific time", "spoken_word_estimate": 4},
+    # --- market (all prices in U.S. dollars, 24-hour change) ---
+    "PRICES_AS_OF_SPOKEN": {"description": "Time the station's price snapshot was taken", "format": "spoken words", "example": "six twenty-nine Pacific time", "spoken_word_estimate": 4, "source_hint": "timestamp of the price read"},
+    "MARKET_DIRECTION": {"description": "Present-tense verb phrase for BTC/ETH/SOL overall 24h move (used in headline tease: 'Cryptocurrency prices {{MARKET_DIRECTION}}')", "format": "one of: 'fall' | 'rise' | 'are mixed' | 'hold steady'", "example": "fall", "spoken_word_estimate": 1, "source_hint": "derive from BTC/ETH/SOL 24h changes (all <= -0.5% fall; all >= +0.5% rise; all within +/-0.5% hold steady; else are mixed)"},
+    "MARKET_DIRECTION_PAST": {"description": "Past-tense form of MARKET_DIRECTION ('Cryptocurrency prices {{MARKET_DIRECTION_PAST}} over the past day')", "format": "one of: 'fell' | 'rose' | 'were mixed' | 'held steady'", "example": "fell", "spoken_word_estimate": 1, "source_hint": "same rule as MARKET_DIRECTION"},
+    "BTC_PRICE": {"description": "Bitcoin price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'", "format": "spoken words", "example": "eighty-one thousand seven hundred", "spoken_word_estimate": 4, "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD"},
+    "BTC_CHANGE_SPOKEN": {"description": "Bitcoin 24h change as a spoken phrase including direction (Canadian 'per cent')", "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'", "example": "down about two per cent", "spoken_word_estimate": 5, "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth BTC / USD (current vs. 24h-ago price)"},
+    "BTC_CHANGE_PCT": {"description": "Bitcoin 24h change, numeric (machine field; not read in scripts)", "format": "digits, signed, one decimal", "example": "-2.0", "spoken_word_estimate": 0, "used_in_scripts": False, "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD"},
+    "BTC_PRICE_DIGITS": {"description": "Bitcoin price for written headlines (not spoken)", "format": "digits with $ and commas, rounded to nearest 100", "example": "$81,700", "spoken_word_estimate": 2, "source_hint": "Price feeds via Helius RPC, e.g. Pyth BTC / USD"},
+    "ETH_PRICE": {"description": "Ether price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'", "format": "spoken words", "example": "two thousand four hundred and seventy-five", "spoken_word_estimate": 6, "source_hint": "Price feeds via Helius RPC, e.g. Pyth ETH / USD"},
+    "ETH_CHANGE_SPOKEN": {"description": "Ether 24h change as a spoken phrase including direction (Canadian 'per cent')", "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'", "example": "down about four per cent", "spoken_word_estimate": 5, "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth ETH / USD (current vs. 24h-ago price)"},
+    "ETH_CHANGE_PCT": {"description": "Ether 24h change, numeric (machine field; not read in scripts)", "format": "digits, signed, one decimal", "example": "-4.2", "spoken_word_estimate": 0, "used_in_scripts": False, "source_hint": "Price feeds via Helius RPC, e.g. Pyth ETH / USD"},
+    "SOL_PRICE": {"description": "Solana price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'", "format": "spoken words", "example": "one hundred and nine", "spoken_word_estimate": 4, "source_hint": "Price feeds via Helius RPC, e.g. Pyth SOL / USD"},
+    "SOL_CHANGE_SPOKEN": {"description": "Solana 24h change as a spoken phrase including direction (Canadian 'per cent')", "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'", "example": "down about six and a half per cent", "spoken_word_estimate": 8, "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth SOL / USD (current vs. 24h-ago price)"},
+    "SOL_CHANGE_PCT": {"description": "Solana 24h change, numeric (machine field; not read in scripts)", "format": "digits, signed, one decimal", "example": "-6.5", "spoken_word_estimate": 0, "used_in_scripts": False, "source_hint": "Price feeds via Helius RPC, e.g. Pyth SOL / USD"},
+    "HYPE_PRICE": {"description": "Hyperliquid (HYPE) price in U.S. dollars, rounded for speech (BTC to nearest 100, ETH to nearest 5, others to whole dollars); script supplies the word 'dollars'", "format": "spoken words", "example": "eighty-four", "spoken_word_estimate": 1, "source_hint": "Price feeds via Helius RPC, e.g. Pyth HYPE / USD"},
+    "HYPE_CHANGE_SPOKEN": {"description": "Hyperliquid (HYPE) 24h change as a spoken phrase including direction (Canadian 'per cent')", "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'", "example": "down about five per cent", "spoken_word_estimate": 5, "source_hint": "24h change from Price feeds via Helius RPC, e.g. Pyth HYPE / USD (current vs. 24h-ago price)"},
+    "HYPE_CHANGE_PCT": {"description": "Hyperliquid (HYPE) 24h change, numeric (machine field; not read in scripts)", "format": "digits, signed, one decimal", "example": "-4.9", "spoken_word_estimate": 0, "used_in_scripts": False, "source_hint": "Price feeds via Helius RPC, e.g. Pyth HYPE / USD"},
+    "TOTAL_MARKET_CAP": {"description": "Total value of all cryptocurrencies in U.S. dollars; script supplies the word 'dollars'", "format": "spoken words", "example": "two point seven eight trillion", "spoken_word_estimate": 5, "source_hint": "not available from Pyth/Helius; use an aggregator (e.g. CoinGecko /global) or drop the 12-min sentence"},
+    "TOTAL_MARKET_CAP_CHANGE_SPOKEN": {"description": "24h change of total crypto market value", "format": "spoken words: 'up about X per cent' | 'down about X per cent' | 'little changed'", "example": "down about five per cent", "spoken_word_estimate": 4, "source_hint": "same as TOTAL_MARKET_CAP"},
 }
-# Optional: fill variables at render time from env vars (STATION_NAME, ANCHOR_NAME, ...). Unfilled by default.
-FILLED = {k: os.environ[k] for k in VARIABLES if os.environ.get(k)}
+# Optional: fill NON-market variables at render time from env vars (STATION_NAME, ANCHOR_NAME, ...). Unfilled by default.
+# Market/price variables are never filled by this script.
+FILLED = {k: os.environ[k] for k in ("STATION_NAME", "ANCHOR_NAME", "TIME_OF_DAY_GREETING", "TIME_SPOKEN") if os.environ.get(k)}
 def fill(o):
     if isinstance(o, str):
         for k, v in FILLED.items(): o = o.replace("{{" + k + "}}", v)
@@ -43,79 +64,10 @@ def fill(o):
     if isinstance(o, list): return [fill(x) for x in o]
     if isinstance(o, dict): return {k: fill(v) for k, v in o.items()}
     return o
-# ---------------- structured market numbers ----------------
-# Story text may contain [[TOKENS]] that are filled from market.json (written by update_prices.py / research job):
-#   [[BTC_PRICE]] [[ETH_PRICE]] [[SOL_PRICE]] [[HYPE_PRICE]]        spoken price, e.g. "eighty-one thousand seven hundred"
-#   [[BTC_CHANGE]] ... [[HYPE_CHANGE]]                              e.g. "down about two per cent" / "little changed"
-#   [[TOTAL_MCAP]] [[TOTAL_MCAP_CHANGE]]                            e.g. "two point seven eight trillion"
-#   [[MARKET_MOVE_PAST]] [[MARKET_MOVE_PRESENT]]                    "fell"/"rose"/"were mixed", "fall"/"rise"/"are mixed"
-#   [[PRICES_AS_OF_SPOKEN]]                                         e.g. "six fifteen Pacific time"
-#   [[BTC_PRICE_DIGITS]] (for headlines)                            e.g. "$81,700"
-ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
-TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
-def words(n):
-    n = int(n)
-    if n < 20: return ONES[n]
-    if n < 100: return TENS[n // 10] + ("" if n % 10 == 0 else "-" + ONES[n % 10])
-    if n < 1000: return ONES[n // 100] + " hundred" + ("" if n % 100 == 0 else " and " + words(n % 100))
-    if n < 1_000_000: return words(n // 1000) + " thousand" + ("" if n % 1000 == 0 else (" and " if n % 1000 < 100 else " ") + words(n % 1000))
-    return words(n // 1_000_000) + " million" + ("" if n % 1_000_000 == 0 else " " + words(n % 1_000_000))
-def spoken_price(p):
-    p = float(p)
-    if p >= 10000: return words(round(p / 100) * 100)
-    if p >= 1000: return words(round(p / 5) * 5)
-    if p >= 100: return words(round(p))
-    if p >= 10: return words(round(p))
-    d = round(p, 2); w = words(int(d)) + " dollars"
-    c = round((d - int(d)) * 100)
-    return w + (f" and {words(c)} cents" if c else "")
-def spoken_change(pct):
-    a = abs(float(pct))
-    if a < 0.5: return "little changed"
-    h = round(a * 2) / 2
-    num = words(int(h)) + (" and a half" if h % 1 else "") if h >= 1 else "half a"
-    return f"{'up' if pct > 0 else 'down'} about {num} per cent"
-def spoken_trillions(x):
-    t = round(float(x) / 1e12, 2); i = int(t); dec = f"{t:.2f}".split(".")[1].rstrip("0")
-    return words(i) + ((" point " + " ".join(ONES[int(c)] for c in dec)) if dec else "") + " trillion"
-def spoken_time(iso):
-    dt = datetime.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
-    h = dt.hour % 12 or 12; m = dt.minute
-    mm = "o'clock" if m == 0 else (("oh " + ONES[m]) if m < 10 else words(m))
-    return f"{words(h)} {mm} Pacific time"
-def market_tokens(m):
-    t = {}
-    for sym in ("BTC", "ETH", "SOL", "HYPE"):
-        a = (m.get("assets") or {}).get(sym)
-        if not a: continue
-        t[f"{sym}_PRICE"] = spoken_price(a["usd"]); t[f"{sym}_CHANGE"] = spoken_change(a["change_24h_pct"])
-        t[f"{sym}_PRICE_DIGITS"] = f"${round(a['usd'] / 100) * 100:,.0f}" if a["usd"] >= 10000 else f"${a['usd']:,.2f}"
-    g = m.get("global") or {}
-    if g.get("total_mcap_usd"):
-        t["TOTAL_MCAP"] = spoken_trillions(g["total_mcap_usd"]); t["TOTAL_MCAP_CHANGE"] = spoken_change(g.get("total_mcap_change_24h_pct", 0))
-    ch = [m["assets"][k]["change_24h_pct"] for k in ("BTC", "ETH", "SOL") if k in m.get("assets", {})]
-    up, dn = sum(c >= 0.5 for c in ch), sum(c <= -0.5 for c in ch)
-    t["MARKET_MOVE_PAST"], t["MARKET_MOVE_PRESENT"] = ("fell", "fall") if dn == len(ch) else ("rose", "rise") if up == len(ch) else ("were mixed", "are mixed")
-    t["PRICES_AS_OF_SPOKEN"] = spoken_time(m["prices_as_of"])
-    return t
-def apply_market(o, t):
-    if isinstance(o, str):
-        for k, v in t.items(): o = o.replace("[[" + k + "]]", v)
-        return o
-    if isinstance(o, list): return [apply_market(x, t) for x in o]
-    if isinstance(o, dict): return {k: apply_market(v, t) for k, v in o.items()}
-    return o
-def load_market(pool):
-    p = os.path.join(BASE, "market.json")
-    m = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else None
-    if not m or m.get("prices_as_of", "") < pool.get("market_snapshot", {}).get("prices_as_of", ""):
-        m = pool.get("market_snapshot") or m
-    return m
-
 def spoken_wc(script):
     return wc(script) + sum(script.count("{{" + k + "}}") * (v["spoken_word_estimate"] - 1) for k, v in VARIABLES.items())
 def var_block():
-    return {k: dict(v, filled=k in FILLED, value=FILLED.get(k)) for k, v in VARIABLES.items()}
+    return {k: dict({"token": "{{" + k + "}}"}, **v, filled=k in FILLED, value=FILLED.get(k)) for k, v in VARIABLES.items()}
 
 def text_for(s, style):
     if style == "long": return (s["text_medium"] + " " + s["text_extra"]).strip()
@@ -226,15 +178,13 @@ def main():
     if not files: sys.exit("no editions/*.pool.json")
     target = os.path.join(BASE, "editions", f"{sys.argv[1]}.pool.json") if len(sys.argv) > 1 else files[-1]
     pool = json.load(open(target, encoding="utf-8")); day = pool["edition"]
-    market = load_market(pool)
-    pool = fill(apply_market(pool, market_tokens(market)) if market else pool)
-    pool["data_snapshot_at"] = market["prices_as_of"] if market else pool["data_snapshot_at"]
+    pool = fill(pool)  # only fills variables explicitly set via env (none by default); prices are never filled here
     now = datetime.datetime.now(ZoneInfo("America/Los_Angeles")).isoformat(timespec="seconds")
     pool["edition_generated_at"] = pool["generated_at"]; pool["generated_at"] = now
     eds = {f: build(pool, f) for f in FORMATS}
-    for ed in eds.values(): ed["prices_as_of"] = market["prices_as_of"] if market else None; ed["market"] = market
+    for ed in eds.values(): ed["prices_as_of"] = "{{PRICES_AS_OF_SPOKEN}}"; ed["prices_filled_by"] = "station"
     bundle = dict(variables=var_block(), generated_at=now, edition_generated_at=pool["edition_generated_at"],
-                  prices_as_of=market["prices_as_of"] if market else None, market=market, edition=day, data_snapshot_at=pool["data_snapshot_at"],
+                  prices_as_of="{{PRICES_AS_OF_SPOKEN}}", prices_filled_by="station", edition=day, data_snapshot_at=pool["data_snapshot_at"],
                   timezone="America/Los_Angeles", wpm_assumed=WPM, disclaimer=pool["disclaimer"], formats=eds)
     dump = lambda o, p: json.dump(o, open(os.path.join(BASE, p), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
     dump(bundle, f"feed-{day}.json")
@@ -247,7 +197,7 @@ def main():
     dump(schedule(), "schedule.json")
     hist = []
     for p in files[-3:][::-1]:
-        pl = json.load(open(p, encoding="utf-8")); mk = load_market(pl); pl = fill(apply_market(pl, market_tokens(mk)) if mk else pl); hist.append((pl["edition"], {f: build(pl, f) for f in FORMATS}))
+        pl = fill(json.load(open(p, encoding="utf-8"))); hist.append((pl["edition"], {f: build(pl, f) for f in FORMATS}))
     open(os.path.join(BASE, "feed.xml"), "w", encoding="utf-8").write(rss(hist))
     for f, ed in eds.items():
         print(f"{f:7s} target {ed['target_words']:5d}  words {ed['word_count']:5d}  ~{ed['est_read_time']}  stories {sum(len(s['stories']) for s in ed['segments'])}")

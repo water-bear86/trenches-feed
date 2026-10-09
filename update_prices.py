@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Price-only refresh (Python stdlib only). Run between hourly research editions.
+"""OPTIONAL LOCAL HELPER (Python stdlib only). Not used by render_feed.py, publish.sh or any workflow.
 
-1. Fetches BTC/ETH/SOL (+ HYPE and total market cap when available) price and 24h change:
-   CoinGecko free API first; fallback Coinbase Exchange public stats, then Kraken public ticker (BTC/ETH/SOL only).
-2. Writes market.json and re-renders from the newest editions/<date>.pool.json. Only the [[MARKET]] tokens in the
-   pool (price sentences, market headline, prices-as-of time) change; story text is untouched.
-3. If every source fails, nothing is written and the script exits 0.
+The published feed leaves every price/market variable UNFILLED ({{BTC_PRICE}}, {{BTC_CHANGE_SPOKEN}}, ...);
+the station fills them at playback from its own data (e.g. Pyth feeds via Helius RPC).
+This helper fetches public prices (CoinGecko, falling back to Coinbase, then Kraken) and prints a JSON object of
+example substitution values in the exact formats documented in latest.json -> "variables", so the station's
+substitution code can be tested.   Usage: python3 update_prices.py [out.json]
+If all sources fail it prints a message and exits 0. It never modifies published files.
 """
 import json, os, sys, datetime, urllib.request
 
@@ -50,35 +51,64 @@ def kraken():
         assets[k] = dict(usd=last, change_24h_pct=round((last / float(ref[1]) - 1) * 100, 2))
     return dict(source="kraken", assets=assets)
 
+ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+def words(n):
+    n = int(n)
+    if n < 20: return ONES[n]
+    if n < 100: return TENS[n // 10] + ("" if n % 10 == 0 else "-" + ONES[n % 10])
+    if n < 1000: return ONES[n // 100] + " hundred" + ("" if n % 100 == 0 else " and " + words(n % 100))
+    if n < 1_000_000: return words(n // 1000) + " thousand" + ("" if n % 1000 == 0 else (" and " if n % 1000 < 100 else " ") + words(n % 1000))
+    return words(n // 1_000_000) + " million" + ("" if n % 1_000_000 == 0 else " " + words(n % 1_000_000))
+def spoken_price(sym, p):
+    return words(round(p / 100) * 100) if sym == "BTC" else words(round(p / 5) * 5) if sym == "ETH" else words(round(p))
+def spoken_change(pct):
+    a = abs(pct)
+    if a < 0.5: return "little changed"
+    h = round(a * 2) / 2
+    num = words(int(h)) + (" and a half" if h % 1 else "")
+    return f"{'up' if pct > 0 else 'down'} about {num} per cent"
+def spoken_trillions(x):
+    t = f"{x / 1e12:.2f}".rstrip("0").rstrip("."); i, _, dec = t.partition(".")
+    return words(int(i)) + ((" point " + " ".join(ONES[int(c)] for c in dec)) if dec else "") + " trillion"
+def spoken_time(dt):
+    h = dt.hour % 12 or 12; m = dt.minute
+    return f"{words(h)} {'o' + chr(39) + 'clock' if m == 0 else ('oh ' + ONES[m]) if m < 10 else words(m)} Pacific time"
+
 def main():
+    from zoneinfo import ZoneInfo
     m = None
     for fn in (coingecko, coinbase, kraken):
         try:
             r = fn()
             if all(k in r["assets"] for k in ("BTC", "ETH", "SOL")):
                 m = r; break
-            print(f"{fn.__name__}: incomplete data")
         except Exception as e:
-            print(f"{fn.__name__} failed: {e}")
+            print(f"{fn.__name__} failed: {e}", file=sys.stderr)
     if not m:
-        print("all price sources failed; leaving files unchanged"); return 0
-    path = os.path.join(BASE, "market.json")
-    old = json.load(open(path)) if os.path.exists(path) else {}
-    if m.get("source") != "coingecko":  # keep last known HYPE / global figures rather than dropping sentences
-        for k in ("HYPE",):
-            if k in old.get("assets", {}): m["assets"][k] = old["assets"][k]
-        if "global" in old: m["global"] = old["global"]
-    from zoneinfo import ZoneInfo
-    m["prices_as_of"] = datetime.datetime.now(ZoneInfo("America/Los_Angeles")).isoformat(timespec="seconds")
-    json.dump(m, open(path, "w"), indent=1)
-    print("prices:", {k: v["usd"] for k, v in m["assets"].items()}, "via", m["source"])
-    sys.argv = sys.argv[:1]
-    import render_feed
-    render_feed.main()
+        print("all price sources failed; nothing to do", file=sys.stderr); return 0
+    v = {}
+    for sym, a in m["assets"].items():
+        v[f"{sym}_PRICE"] = spoken_price(sym, a["usd"]); v[f"{sym}_CHANGE_SPOKEN"] = spoken_change(a["change_24h_pct"])
+        v[f"{sym}_CHANGE_PCT"] = f"{a['change_24h_pct']:+.1f}"
+    v["BTC_PRICE_DIGITS"] = f"${round(m['assets']['BTC']['usd'] / 100) * 100:,.0f}"
+    ch = [m["assets"][k]["change_24h_pct"] for k in ("BTC", "ETH", "SOL")]
+    if all(c <= -0.5 for c in ch): d = ("fall", "fell")
+    elif all(c >= 0.5 for c in ch): d = ("rise", "rose")
+    elif all(abs(c) < 0.5 for c in ch): d = ("hold steady", "held steady")
+    else: d = ("are mixed", "were mixed")
+    v["MARKET_DIRECTION"], v["MARKET_DIRECTION_PAST"] = d
+    if m.get("global"):
+        v["TOTAL_MARKET_CAP"] = spoken_trillions(m["global"]["total_mcap_usd"])
+        v["TOTAL_MARKET_CAP_CHANGE_SPOKEN"] = spoken_change(m["global"]["total_mcap_change_24h_pct"])
+    v["PRICES_AS_OF_SPOKEN"] = spoken_time(datetime.datetime.now(ZoneInfo("America/Los_Angeles")))
+    out = json.dumps(dict(source=m["source"], values=v), indent=1)
+    if len(sys.argv) > 1: open(sys.argv[1], "w").write(out)
+    print(out)
     return 0
 
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except Exception as e:  # never fail the scheduled job
-        print("update_prices error:", e); sys.exit(0)
+    except Exception as e:
+        print("update_prices error:", e, file=sys.stderr); sys.exit(0)
