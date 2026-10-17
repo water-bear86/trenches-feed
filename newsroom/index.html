@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Newsroom · Exit Liquidity FM</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to newsroom</a>
+  <aside class="sidebar">
+    <div class="brand" aria-label="Exit Liquidity FM">Exit<br> Liquidity <span>FM</span></div>
+    <nav aria-label="Newsroom">
+      <button class="nav-item active" data-view="radar" aria-current="page">Live radar</button>
+      <button class="nav-item" data-view="jobs">Investigations</button>
+      <button class="nav-item" data-view="sources">Source health</button>
+    </nav>
+    <section class="budget" aria-label="Daily research budget">
+      <div><span>Research today</span><strong id="budget-total">— / 24</strong></div>
+      <div><span>Background</span><strong id="budget-background">— / 12</strong></div>
+      <div><span>Triggered</span><strong id="budget-triggered">— / 12</strong></div>
+      <p class="budget-note" id="budget-note">UTC day · includes failed requests</p>
+    </section>
+    <div class="off-air"><span class="dot open"></span>Off air</div>
+  </aside>
+  <main id="main">
+    <header class="topbar"><strong>Newsroom</strong><div>Solana <span class="top-divider"></span><span id="collector-status"><span class="dot open"></span>Connecting</span></div></header>
+    <div class="content">
+      <div class="introduction"><div><h1 id="page-title">The tape, with receipts.</h1><p id="page-subtitle">Signals first. Stories when the evidence holds.</p></div><span id="last-scan" class="mono">Waiting for the first scan</span></div>
+      <div class="toolbar" id="toolbar">
+        <div class="filters" role="group" aria-label="Candidate status">
+          <button data-filter="all" class="selected" aria-pressed="true">All candidates</button>
+          <button data-filter="research" aria-pressed="false">Needs research</button>
+          <button data-filter="drafted" aria-pressed="false">Drafted</button>
+        </div>
+        <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.5"></circle><path d="m16 16 5 5"></path></svg><input id="search" type="search" placeholder="Search token or contract" aria-label="Search token or contract"></label>
+      </div>
+      <section class="workspace" id="radar-view" aria-label="Live candidate queue">
+        <div class="queue"><div class="section-heading"><h2>Candidate queue</h2><span id="candidate-count" class="mono">— active</span></div><div id="candidate-list" class="candidate-list"></div></div>
+        <section id="inspector" class="inspector" aria-label="Selected candidate evidence"></section>
+      </section>
+      <section id="jobs-view" class="secondary-view" hidden aria-label="Investigations"></section>
+      <section id="sources-view" class="secondary-view" hidden aria-label="Source health"></section>
+      <p id="connection-error" class="notice" hidden>The newsroom connection was interrupted. Displayed observations may be stale.</p>
+    </div>
+    <footer class="sourcebar" id="sourcebar"><strong>Source health</strong><span>Waiting for collector status</span></footer>
+  </main>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# Optional live Solana WebSocket source; market radar and X streaming use the standard library.
+websocket-client>=1.8.0,<2

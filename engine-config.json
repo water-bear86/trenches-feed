@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "backend": "grok-cli",
+  "lookback_hours": 48,
+  "edition_ttl_minutes": 60,
+  "max_stories": 8,
+  "reuse_target": 0.8,
+  "story_cooldown_minutes": 30,
+  "breaking_story_ids": [],
+  "model": "",
+  "reasoning_effort": "low",
+  "daily_research_calls": 24,
+  "max_turns": 6,
+  "max_output_tokens": 10000,
+  "timeout_seconds": 240,
+  "allowed_x_handles": [],
+  "web_domains": [],
+  "coverage_terms": ["crypto", "bitcoin", "ethereum", "solana", "memecoin", "blockchain", "on-chain", "onchain", "stablecoin", "defi", "dex", "decentralised exchange", "decentralized exchange", "pump.fun", "raydium", "hyperliquid", "tokenized", "tokenised", "bnb chain"]
+}
