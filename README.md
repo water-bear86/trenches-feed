@@ -267,6 +267,43 @@ Story-specific figures from research (e.g. a token's reported gain, a trader's l
 - The `price-update` workflow is disabled and has no schedule. `pages.yml` deploys Pages on every push.
 - The historical hourly research job was external to this repository. The new engine does not install or alter it.
 
+## Private station feed
+
+`GET /api/stories` on the loopback newsroom supplies a complete, bounded snapshot for
+Exit Liquidity FM: stable story IDs/revisions, original event/research/expiry clocks,
+source-attributed narrative blocks, and explicit withdrawal records. `served_at` is
+delivery time; it never replaces `researched_at`. Only locally configured
+`breaking_story_ids` appear in `trusted_crazy_story_ids`. The snapshot excludes
+operator tokens, research captures, usage records and credentials. Missing or
+oversized state fails with HTTP 503 rather than appearing to be an empty fresh feed.
+
+When the station runs on another LAN machine, `feed_bridge.py` provides an optional
+read-only TLS link. It binds one explicit private IPv4 address, accepts only listed
+client IPs (checked before TLS), requires the configured Host, and exposes exactly
+`/api/stories` plus `/assets/bed.mp3` when a supplied bed file is configured. Operator
+actions and the rest of the filesystem are unavailable. The ledger is opened in
+read-only mode, and no research is started by a feed request.
+
+Use a local server certificate whose subjectAltName contains the bind IP, keep its
+private key owner-readable under `.state/`, and give the station only the public
+certificate. Configure feed-specific certificate trust on the station; retain normal
+hostname/certificate verification. Do not disable TLS verification globally.
+
+```sh
+python3 feed_bridge.py --bind 192.168.88.2 --allow-client 192.168.88.3 \
+  --cert .state/feed-tls/server.pem --key .state/feed-tls/server.key
+```
+
+The addresses above are an example deployment. Add `--bed-file /absolute/path/to/supplied.mp3`
+only for an existing station-owned asset. FFprobe or the station's asset admission
+must validate that file before playback. TLS setup needs OpenSSL or another valid
+certificate issuer; the Python bridge itself uses only the standard library.
+
+This link depends on the source machine and its engine process remaining available.
+It does not install a service or migrate a Grok login, story ledger or research
+allowance. The station must recheck feed health, revision, withdrawal and expiry
+before airing a cached recording. Monitor certificate expiry when operating it.
+
 ## Donate
 
 If you found this to be useful, consider donating by sending magic internet monies to:

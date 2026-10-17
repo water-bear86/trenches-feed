@@ -3,14 +3,44 @@
 import datetime as dt
 import json
 import secrets
+import sqlite3
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from news_engine import UTC
+from news_engine import COPY_FIELDS, UTC, timestamp
 from radar_store import RadarStore
 
 ASSETS = Path(__file__).resolve().parent / "newsroom"
+MAX_STORY_FEED_BYTES = 4_000_000
+
+
+def story_feed(state_dir, engine_config, now=None):
+    """Read the current ledger without creating state or renewing story deadlines."""
+    now = now or dt.datetime.now(UTC)
+    database = (Path(state_dir) / "newsroom.sqlite").resolve()
+    db = sqlite3.connect(database.as_uri() + "?mode=ro", uri=True, timeout=2)
+    try:
+        # Expired recordings cannot air; withdrawal tombstones remain explicit.
+        rows = db.execute("SELECT body FROM stories WHERE json_extract(body, '$.expires_at')>? "
+                          "OR json_extract(body, '$.status')='withdrawn' ORDER BY rowid LIMIT 1001",
+                          (timestamp(now),)).fetchall()
+        if len(rows) > 1000:
+            raise ValueError("Story feed exceeds its bounded snapshot limit.")
+        fields = ("id", "revision", "status", "headline", "timestamp", "researched_at", "expires_at",
+                  "verification", "source_urls", "claims", "event_url", "evidence_type", "segment",
+                  "priority", *COPY_FIELDS)
+        stories = [{key: body[key] for key in fields if key in body}
+                   for body in (json.loads(row[0]) for row in rows)]
+        eligible = {story["id"] for story in stories if story.get("status") == "reported"}
+        feed = {"schema_version": 1, "served_at": timestamp(now), "complete": True, "stories": stories,
+                "trusted_crazy_story_ids": [story_id for story_id in engine_config["breaking_story_ids"]
+                                            if story_id in eligible]}
+        if len(json.dumps(feed, ensure_ascii=False, allow_nan=False).encode()) > MAX_STORY_FEED_BYTES:
+            raise ValueError("Story feed exceeds its response limit.")
+        return feed
+    finally:
+        db.close()
 
 
 def make_server(state_dir, engine_config, config, port=8791):
@@ -59,6 +89,12 @@ def make_server(state_dir, engine_config, config, port=8791):
                     self.send(200, state)
                 finally:
                     store.close()
+                return
+            if path == "/api/stories":
+                try:
+                    self.send(200, story_feed(state_dir, engine_config))
+                except (OSError, ValueError, TypeError, KeyError, sqlite3.Error):
+                    self.send(503, {"error": "The current story ledger is unavailable."})
                 return
             self.send(404, {"error": "Not found."})
 
