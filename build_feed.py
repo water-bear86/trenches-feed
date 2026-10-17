@@ -5,7 +5,7 @@ Pulls free public APIs and writes:
   raw/<YYYY-MM-DD>/*.json      raw API responses
   data-<YYYY-MM-DD>.md         human-readable digest for the writer/host
 
-What this script does NOT do (needs judgment via X + web search):
+Research and story writing are handled by news_engine.py / research.py. This collector does not:
   - Story selection & narrative: run X `search_news` (max_age_hours=48) for queries like
     "crypto bitcoin market", "memecoin pump.fun solana", "crypto ETF SEC regulation hack exploit",
     "BNB Chain Base memecoin four.meme", "memecoin narrative meta AI agents tokenized stocks",
@@ -16,6 +16,7 @@ What this script does NOT do (needs judgment via X + web search):
 Usage: python3 build_feed.py
 """
 import json, os, sys, time, datetime, urllib.request
+from pathlib import Path
 
 UA = {"User-Agent": "trenches-feed/1.0", "Accept": "application/json"}
 SOURCES = {
@@ -34,8 +35,40 @@ SOURCES = {
 
 def get(url):
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.loads(r.read().decode())
+    with urllib.request.urlopen(req, timeout=10) as r:
+        raw = r.read(4_000_001)
+    if len(raw) > 4_000_000:
+        raise ValueError("API response exceeds the size limit")
+    return json.loads(raw)
+
+
+def collect(output_dir, names=None, fetch=get, pause=time.sleep):
+    """Return this run's observations only; failed sources never reuse yesterday's data."""
+    names = list(SOURCES) if names is None else list(names)
+    if not names or any(name not in SOURCES for name in names):
+        raise ValueError("Choose at least one known market source.")
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    sources = {}
+    for name in names:
+        observed_at = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+        record = {"source_url": SOURCES[name], "observed_at": observed_at}
+        try:
+            data = fetch(SOURCES[name])
+            if not isinstance(data, (dict, list)) or not data:
+                raise ValueError("Empty or malformed market response")
+            if isinstance(data, dict) and (data.get("error") or data.get("status", {}).get("error_code")):
+                raise ValueError("Provider returned an error object")
+            record.update(status="ok", data=data)
+        except (OSError, ValueError, TypeError, AttributeError):
+            record.update(status="error", error="Market source failed or returned invalid data")
+        sources[name] = record
+        (output_dir / f"{name}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
+        pause(0.4)
+    snapshot = {"collected_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+                "sources": sources}
+    (output_dir / "snapshot.json").write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n")
+    return snapshot
 
 def money(x):
     try: x = float(x)
@@ -48,15 +81,9 @@ def main():
     base = os.path.dirname(os.path.abspath(__file__))
     day = datetime.date.today().isoformat()
     outdir = os.path.join(base, "raw", day)
-    os.makedirs(outdir, exist_ok=True)
-    data, status = {}, {}
-    for k, u in SOURCES.items():
-        try:
-            data[k] = get(u); status[k] = "ok"
-            with open(os.path.join(outdir, f"{k}.json"), "w") as fh: json.dump(data[k], fh, indent=1)
-        except Exception as e:
-            status[k] = f"FAILED: {e}"
-        time.sleep(1.5)  # stay polite with free tiers (CoinGecko ~30 req/min)
+    snapshot = collect(Path(outdir) / datetime.datetime.now().strftime("%H%M%S"))
+    data = {k: value["data"] for k, value in snapshot["sources"].items() if value["status"] == "ok"}
+    status = {k: value["status"] for k, value in snapshot["sources"].items()}
 
     L = [f"# Trenches data digest - {datetime.datetime.now().astimezone():%Y-%m-%d %H:%M %Z}", ""]
     L.append("## Source status"); L += [f"- {k}: {v}" for k, v in status.items()]; L.append("")

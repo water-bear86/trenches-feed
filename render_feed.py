@@ -14,8 +14,10 @@ Env: FEED_BASE_URL (public base URL once hosted); optional STATION_NAME, ANCHOR_
      TIME_OF_DAY_GREETING, TIME_SPOKEN to pre-fill {{TEMPLATE}} variables (left unfilled by default;
      TIME_* should normally be filled by the station at playback).
 """
-import json, os, sys, glob, datetime, email.utils, hashlib
-from zoneinfo import ZoneInfo
+import argparse, json, os, datetime, email.utils, hashlib, re, tempfile
+from pathlib import Path
+from urllib.parse import urlsplit
+from itertools import groupby
 from xml.sax.saxutils import escape
 
 BASE = os.path.dirname(os.path.abspath(__file__))
@@ -69,6 +71,85 @@ def spoken_wc(script):
 def var_block():
     return {k: dict({"token": "{{" + k + "}}"}, **v, filled=k in FILLED, value=FILLED.get(k)) for k, v in VARIABLES.items()}
 
+
+def parse_time(value):
+    if not isinstance(value, str):
+        raise ValueError("Timestamp must be an ISO 8601 string with a timezone.")
+    try:
+        result = datetime.datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        raise ValueError("Invalid ISO 8601 timestamp.") from None
+    if result.tzinfo is None or result.utcoffset() is None:
+        raise ValueError("Timestamp must include a timezone.")
+    return result
+
+
+def validate_copy(value, allow_empty=False):
+    if not isinstance(value, str) or len(value) > 15000 or (not allow_empty and not value.strip()):
+        raise ValueError("Spoken copy must be a bounded, nonempty string.")
+    if re.search(r"https?://|<[^>]+>|\[[^\]]+\]\(|[\x00-\x08\x0b-\x1f]", value):
+        raise ValueError("Spoken copy contains URLs, markup or control characters.")
+    for token in re.findall(r"\{\{([^{}]+)\}\}", value):
+        if token not in VARIABLES or VARIABLES[token].get("used_in_scripts") is False:
+            raise ValueError(f"Unknown or non-spoken template variable: {token}")
+    remainder = re.sub(r"\{\{[^{}]+\}\}", "", value)
+    if "{{" in remainder or "}}" in remainder:
+        raise ValueError("Malformed template variable.")
+
+
+def validate_pool(pool, now, allow_stale=False):
+    generated = parse_time(pool["generated_at"])
+    researched = parse_time(pool.get("researched_at", pool["generated_at"]))
+    expires = parse_time(pool.get("expires_at", (researched + datetime.timedelta(hours=1)).isoformat()))
+    snapshot = parse_time(pool["data_snapshot_at"])
+    if max(generated, researched, snapshot) > now + datetime.timedelta(seconds=60):
+        raise ValueError("Pool has a future timestamp.")
+    if generated != researched or expires <= researched:
+        raise ValueError("Pool freshness timestamps are inconsistent.")
+    if not allow_stale and expires <= now:
+        raise ValueError("Story pool has expired; fresh research is required.")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", pool["edition"]):
+        raise ValueError("Edition must be a calendar date.")
+    datetime.date.fromisoformat(pool["edition"])
+    segments = pool["segments"]
+    if not isinstance(segments, list) or not segments or len(segments) > 12:
+        raise ValueError("Pool needs a bounded segment list.")
+    segment_ids = [s["id"] for s in segments]
+    if len(set(segment_ids)) != len(segment_ids):
+        raise ValueError("Duplicate segment IDs.")
+    for segment in segments:
+        validate_copy(segment["name"])
+        validate_copy(segment["intro"])
+    for key in ("title_base", "disclaimer", "intro_long", "intro_short", "intro_flash",
+                "outro_long", "outro_short", "outro_flash"):
+        validate_copy(pool[key])
+    stories = pool["stories"]
+    if not isinstance(stories, list) or not 1 <= len(stories) <= 100:
+        raise ValueError("A pool needs between one and one hundred stories.")
+    ids = set()
+    for story in stories:
+        if not isinstance(story["id"], str) or story["id"] in ids:
+            raise ValueError("Duplicate or invalid story ID.")
+        ids.add(story["id"])
+        if story["segment"] not in segment_ids or type(story["priority"]) is not int or story["priority"] not in (1, 2, 3):
+            raise ValueError("Invalid story segment or priority.")
+        if story.get("status", "reported") != "reported":
+            raise ValueError("Unverified or withdrawn stories cannot be rendered.")
+        if parse_time(story["timestamp"]) > now + datetime.timedelta(seconds=60):
+            raise ValueError("Story timestamp is in the future.")
+        if not allow_stale and "expires_at" in story and parse_time(story["expires_at"]) <= now:
+            raise ValueError("A selected story has expired.")
+        for key in ("headline", "text_medium", "text_short", "text_flash", "text_extra"):
+            # Legacy pools intentionally leave shorter variants empty and use text_for fallbacks.
+            validate_copy(story[key], allow_empty=key in ("text_extra", "text_short", "text_flash"))
+        if not isinstance(story["source_urls"], list) or not story["source_urls"]:
+            raise ValueError("Every story needs source URLs.")
+        for url in story["source_urls"]:
+            parsed = urlsplit(url)
+            if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+                raise ValueError("Story sources must be HTTPS URLs without credentials.")
+    return expires
+
 def text_for(s, style):
     if style == "long": return (s["text_medium"] + " " + s["text_extra"]).strip()
     if style == "medium": return s["text_medium"]
@@ -78,16 +159,22 @@ def text_for(s, style):
 def build(pool, fmt):
     target, label, maxpri, style, ist = FORMATS[fmt]
     chosen = {s["id"]: style for s in pool["stories"] if s["priority"] <= maxpri}
+    if not chosen:
+        first = min(pool["stories"], key=lambda s: s["priority"])
+        chosen[first["id"]] = style
     def assemble():
         segs, parts = [], [pool[f"intro_{ist}"]]
-        for seg in pool["segments"]:
-            items = [s for s in pool["stories"] if s["segment"] == seg["id"] and s["id"] in chosen]
-            if not items: continue
+        segment_map = {seg["id"]: seg for seg in pool["segments"]}
+        ordered = [s for s in pool["stories"] if s["id"] in chosen]
+        for segment_id, group in groupby(ordered, key=lambda s: s["segment"]):
+            seg, items = segment_map[segment_id], list(group)
             sintro = seg["name"] + "." if style == "flash" else seg["intro"]
             parts.append(sintro)
-            st = [dict(id=f"{pool['edition']}-{fmt}-{s['id']}", segment=seg["name"], segment_id=seg["id"],
+            st = [dict(id=f"{pool['edition']}-{fmt}-{s['id']}", story_id=s["id"],
+                       revision=s.get("revision", 1), segment=seg["name"], segment_id=seg["id"],
                        headline=s["headline"], script_text=text_for(s, chosen[s["id"]]),
-                       source_urls=s["source_urls"], timestamp=s["timestamp"]) for s in items]
+                       source_urls=s["source_urls"], timestamp=s["timestamp"],
+                       **{k: s[k] for k in ("event_key", "event_url", "claims", "expires_at", "verification", "evidence_type", "breaking") if k in s}) for s in items]
             for x in st: x["word_count"] = wc(x["script_text"]); parts.append(x["script_text"])
             segs.append(dict(id=seg["id"], name=seg["name"], intro=sintro, stories=st))
         parts.append(pool[f"outro_{ist}"])
@@ -105,7 +192,7 @@ def build(pool, fmt):
             st = chosen.get(s["id"])
             if step == "extras" and st == "long" and s["text_extra"]:
                 chosen[s["id"]] = "medium"
-            elif step == "drop3" and s["priority"] == 3:
+            elif step == "drop3" and s["priority"] == 3 and len(chosen) > 1:
                 del chosen[s["id"]]
             elif step == "shorten" and st in ("medium", "short"):
                 chosen[s["id"]] = shrink[st]
@@ -121,9 +208,23 @@ def build(pool, fmt):
         add = wc(text_for(s, new)) - (wc(text_for(s, style)) if s["id"] in chosen else 0)
         if spoken_wc(script) + add <= target:
             chosen[s["id"]] = new; segs, script = assemble()
+    # Word estimates are a ceiling, never permission to cut a sentence or fabricate filler.
+    for s in order:
+        while over() and chosen.get(s["id"]) in shrink:
+            chosen[s["id"]] = shrink[chosen[s["id"]]]
+            segs, script = assemble()
+    for s in order:
+        if not over():
+            break
+        if s["id"] in chosen and len(chosen) > 1:
+            del chosen[s["id"]]
+            segs, script = assemble()
+    if over():
+        raise ValueError(f"A complete story and framing cannot fit {fmt}.")
     words = spoken_wc(script)
     return dict(variables=var_block(), format=fmt, label=label, edition=pool["edition"], title=f"{pool['title_base']} ({label})",
                 generated_at=pool["generated_at"], data_snapshot_at=pool["data_snapshot_at"],
+                underfilled=words < target * 0.75,
                 target_words=target, word_count=words, est_read_seconds=round(words / WPM * 60),
                 est_read_time=f"{round(words / WPM * 60) // 60}:{round(words / WPM * 60) % 60:02d}", wpm_assumed=WPM,
                 disclaimer=pool["disclaimer"], intro=pool[f"intro_{ist}"], outro=pool[f"outro_{ist}"],
@@ -153,7 +254,7 @@ def schedule():
 def rfc822(ts): return email.utils.format_datetime(datetime.datetime.fromisoformat(ts.replace("Z", "+00:00")))
 
 def rss(eds_by_date):
-    now = email.utils.format_datetime(datetime.datetime.now().astimezone())
+    now = rfc822(eds_by_date[0][1]["12min"]["generated_at"])
     X = ['<?xml version="1.0" encoding="UTF-8"?>', '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">', "<channel>",
          "<title>Trenches Report: crypto &amp; memecoin news feed</title>", f"<link>{URL}/</link>",
          f'<atom:link href="{URL}/feed.xml" rel="self" type="application/rss+xml"/>',
@@ -173,34 +274,69 @@ def rss(eds_by_date):
                           s["source_urls"][0], s["segment"], s["id"], s["timestamp"])
     return "\n".join(X + ["</channel>", "</rss>", ""])
 
-def main():
-    files = sorted(glob.glob(os.path.join(BASE, "editions", "*.pool.json")))
-    if not files: sys.exit("no editions/*.pool.json")
-    target = os.path.join(BASE, "editions", f"{sys.argv[1]}.pool.json") if len(sys.argv) > 1 else files[-1]
-    pool = json.load(open(target, encoding="utf-8")); day = pool["edition"]
-    pool = fill(pool)  # only fills variables explicitly set via env (none by default); prices are never filled here
-    now = datetime.datetime.now(ZoneInfo("America/Los_Angeles")).isoformat(timespec="seconds")
-    pool["edition_generated_at"] = pool["generated_at"]; pool["generated_at"] = now
-    eds = {f: build(pool, f) for f in FORMATS}
-    for ed in eds.values(): ed["prices_as_of"] = "{{PRICES_AS_OF_SPOKEN}}"; ed["prices_filled_by"] = "station"
-    bundle = dict(variables=var_block(), generated_at=now, edition_generated_at=pool["edition_generated_at"],
-                  prices_as_of="{{PRICES_AS_OF_SPOKEN}}", prices_filled_by="station", edition=day, data_snapshot_at=pool["data_snapshot_at"],
+def write_artifacts(output_dir, artifacts):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    # Prepare every artifact before replacing any. latest.json acts as the bundle commit marker.
+    with tempfile.TemporaryDirectory(prefix=".render-", dir=output_dir) as temporary:
+        staging = Path(temporary)
+        for name, content in artifacts.items():
+            (staging / name).write_text(content, encoding="utf-8")
+        for name in sorted(artifacts, key=lambda name: name == "latest.json"):
+            os.replace(staging / name, output_dir / name)
+
+
+def render_to(pool, output_dir, now=None, allow_stale=False):
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    expires = validate_pool(pool, now, allow_stale)
+    pool = fill(pool)
+    day = pool["edition"]
+    eds = {fmt: build(pool, fmt) for fmt in FORMATS}
+    meta = {"generated_at": pool["generated_at"], "researched_at": pool.get("researched_at", pool["generated_at"]),
+            "edition_generated_at": pool["generated_at"], "rendered_at": now.isoformat(),
+            "expires_at": expires.isoformat(), "available": expires > now,
+            "prices_as_of": "{{PRICES_AS_OF_SPOKEN}}", "prices_filled_by": "station"}
+    for key in ("research_id", "provenance", "reuse", "withdrawn_story_ids"):
+        if key in pool:
+            meta[key] = pool[key]
+    for edition in eds.values():
+        edition.update(meta)
+    bundle = dict(variables=var_block(), **meta, edition=day, data_snapshot_at=pool["data_snapshot_at"],
                   timezone="America/Los_Angeles", wpm_assumed=WPM, disclaimer=pool["disclaimer"], formats=eds)
-    dump = lambda o, p: json.dump(o, open(os.path.join(BASE, p), "w", encoding="utf-8"), indent=1, ensure_ascii=False)
-    dump(bundle, f"feed-{day}.json")
-    if target == files[-1]:
-        dump(bundle, "latest.json")
-        for f, ed in eds.items(): dump(ed, f"latest-{f}.json")
-    for f, ed in eds.items(): open(os.path.join(BASE, f"feed-{day}-{f}.md"), "w", encoding="utf-8").write(md(ed))
-    idx = [f"# Trenches Report {day}: all formats", ""] + [f"- [{ed['label']}](feed-{day}-{f}.md): {ed['word_count']} words, ~{ed['est_read_time']}" for f, ed in eds.items()] + ["", "---", "", md(eds["12min"])]
-    open(os.path.join(BASE, f"feed-{day}.md"), "w", encoding="utf-8").write("\n".join(idx))
-    dump(schedule(), "schedule.json")
-    hist = []
-    for p in files[-3:][::-1]:
-        pl = fill(json.load(open(p, encoding="utf-8"))); hist.append((pl["edition"], {f: build(pl, f) for f in FORMATS}))
-    open(os.path.join(BASE, "feed.xml"), "w", encoding="utf-8").write(rss(hist))
-    for f, ed in eds.items():
-        print(f"{f:7s} target {ed['target_words']:5d}  words {ed['word_count']:5d}  ~{ed['est_read_time']}  stories {sum(len(s['stories']) for s in ed['segments'])}")
+    encode = lambda value: json.dumps(value, indent=1, ensure_ascii=False, allow_nan=False) + "\n"
+    artifacts = {f"feed-{day}.json": encode(bundle), "latest.json": encode(bundle),
+                 "schedule.json": encode(schedule()), "feed.xml": rss([(day, eds)])}
+    for fmt, edition in eds.items():
+        artifacts[f"latest-{fmt}.json"] = encode(edition)
+        artifacts[f"feed-{day}-{fmt}.md"] = md(edition)
+    artifacts[f"feed-{day}.md"] = "\n".join([f"# Trenches Report {day}: all formats", ""] + [
+        f"- [{ed['label']}](feed-{day}-{fmt}.md): {ed['word_count']} words, ~{ed['est_read_time']}"
+        for fmt, ed in eds.items()] + ["", md(eds["12min"])])
+    write_artifacts(output_dir, artifacts)
+    return bundle
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("edition", nargs="?")
+    parser.add_argument("--pool", type=Path)
+    parser.add_argument("--output-dir", type=Path, default=Path(BASE))
+    parser.add_argument("--allow-stale", action="store_true", help="Historical review in a separate output directory only")
+    args = parser.parse_args()
+    if args.allow_stale and args.output_dir.resolve() == Path(BASE).resolve():
+        parser.error("Historical rendering requires a separate --output-dir.")
+    files = sorted(Path(BASE, "editions").glob("*.pool.json"))
+    target = args.pool or (Path(BASE, "editions", f"{args.edition}.pool.json") if args.edition else (files[-1] if files else None))
+    if not target:
+        parser.error("No story pool found.")
+    try:
+        if target.stat().st_size > 4_000_000:
+            raise ValueError("Story pool exceeds the size limit.")
+        bundle = render_to(json.loads(target.read_text(encoding="utf-8")), args.output_dir, allow_stale=args.allow_stale)
+        for fmt, ed in bundle["formats"].items():
+            print(f"{fmt:7s} {ed['word_count']:4d}/{ed['target_words']} words, ~{ed['est_read_time']}, underfilled={ed['underfilled']}")
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        parser.exit(1, f"Render refused: {error}\n")
 
 if __name__ == "__main__":
     main()
