@@ -2,7 +2,7 @@
 
 const ui = { data: null, connected: false, selected: null, selectedJob: null, filter: 'all', query: '', view: 'radar', busy: false };
 const $ = selector => document.querySelector(selector);
-const names = { dexscreener: 'DEX Screener', dex_discovery: 'Token discovery', geckoterminal: 'GeckoTerminal', pool_verification: 'Pool cross-check', x_stream: 'X stream', solana_stream: 'Solana stream' };
+const names = { dexscreener: 'DEX Screener', dex_discovery: 'Token discovery', pool_verification: 'Pool cross-check', x_stream: 'X stream', solana_stream: 'Solana stream' };
 const statuses = { ok: 'Connected', error: 'Interrupted', degraded: 'Partial', unconfigured: 'Not configured', connecting: 'Connecting', waiting: 'Waiting', capped: 'Daily cap' };
 const kinds = { volume_acceleration: 'Volume acceleration', price_move: 'Price move', liquidity_change: 'Liquidity change', new_active_pool: 'New active pool', source_post: 'Source post', watched_transaction: 'Watched transaction' };
 const evidenceNames = { provider_observation: 'Provider observation', firsthand_post: 'Source claim', transaction_log: 'Transaction log' };
@@ -250,7 +250,7 @@ function render() {
   document.querySelectorAll('[data-filter]').forEach(button => { const selected = button.dataset.filter === ui.filter; button.classList.toggle('selected', selected); button.setAttribute('aria-pressed', String(selected)); });
   renderQueue(); renderInspector(); renderJobs(); renderSources();
   const footer = $('#sourcebar'); footer.replaceChildren(el('strong', '', 'Source health'));
-  for (const id of ['dexscreener', 'geckoterminal', 'x_stream', 'solana_stream']) {
+  for (const id of ['dexscreener', 'x_stream', 'solana_stream']) {
     const source = ui.data.sources.find(value => value.id === id);
     const entry = el('span', 'source-status'); entry.append(dot(ui.connected && source?.fresh ? source.status : 'waiting'), document.createTextNode(names[id]), el('small', '', sourceStatus(source))); footer.append(entry);
   }

@@ -66,7 +66,7 @@ class RadarStore:
     def watched_tokens(self, config, now):
         cutoff = timestamp(now - dt.timedelta(seconds=config["watch_ttl_seconds"]))
         discovered = [r[0] for r in self.db.execute(
-            "SELECT address FROM radar_tokens WHERE last_seen>? ORDER BY CASE origin WHEN 'geckoterminal_trending' THEN 0 ELSE 1 END,last_seen DESC,address", (cutoff,))]
+            "SELECT address FROM radar_tokens WHERE last_seen>? ORDER BY last_seen DESC,address", (cutoff,))]
         return list(dict.fromkeys(config["watch_tokens"] + discovered))[:config["max_watched_tokens"]]
 
     def candidate(self, candidate_id):
@@ -267,7 +267,7 @@ class RadarStore:
         health = [{**dict(r), "details": json.loads(r["body"])} for r in self.db.execute("SELECT * FROM radar_sources ORDER BY id")]
         for source in health:
             del source["body"]
-            interval = config["discovery_seconds"] * 2 if source["id"] in ("dex_discovery", "geckoterminal") else config["source_stale_seconds"]
+            interval = config["discovery_seconds"] * 2 if source["id"] == "dex_discovery" else config["source_stale_seconds"]
             source["fresh"] = bool(source["last_success"] and dt.datetime.fromisoformat(source["last_success"]) > now - dt.timedelta(seconds=interval))
         jobs = [{**dict(r), "details": json.loads(r["body"])} for r in self.db.execute("SELECT * FROM radar_jobs ORDER BY created_at DESC LIMIT 50")]
         for job in jobs:
