@@ -3,6 +3,13 @@
 # 3) render md/json/latest.json/feed.xml
 set -euo pipefail
 cd "$(dirname "$0")"
+# Optional private server environment; credentials never appear in arguments.
+provider_env="${CMC_ENV_FILE:-${HOME}/.config/trenches-feed/provider.env}"
+if [ -r "$provider_env" ]; then
+  set -a
+  . "$provider_env"
+  set +a
+fi
 python3 build_feed.py || echo "WARN: some API sources failed (see data-$(date +%F).md)"
 if [ -f "editions/$(date +%F).pool.json" ]; then python3 render_feed.py "$(date +%F)"
 else echo "No editions/$(date +%F).pool.json yet - write today's story pool (judgment step; see editions/_make_pool_2026-10-08.py), then run: python3 render_feed.py"; fi

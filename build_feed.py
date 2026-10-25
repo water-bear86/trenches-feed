@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Trenches feed - data gathering (re-runnable, no API keys needed).
+"""Trenches feed - data gathering (re-runnable; configure a server-only CMC key for quoted market data).
 
 Pulls free public APIs and writes:
   raw/<YYYY-MM-DD>/*.json      raw API responses

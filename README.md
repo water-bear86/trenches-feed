@@ -50,6 +50,8 @@ Story-specific figures from research (e.g. a token's reported gain, a trader's l
 - The `price-update` workflow is disabled and has no schedule. `pages.yml` deploys Pages on every push.
 - Hourly research runs at :55 PT (separate job) and publishes with `publish.sh` (which `git pull --rebase`s first).
 
+For scheduled collection, store `CMC_PRO_API_KEY` (or `CMC_API_KEY`) in a private server environment. `build_feed.sh` optionally reads `$HOME/.config/trenches-feed/provider.env` (override with `CMC_ENV_FILE`). Keep the directory private and the file mode `0600`. A CMC key enables supported quotes and global metrics; a failed source is reported as unavailable.
+
 ## Donate
 
 If you found this to be useful, consider donating by sending magic internet monies to:
