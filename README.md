@@ -46,7 +46,7 @@ actions. It serves only its named UI assets and API. It has no publish or broadc
 
 `radar-config.json` controls the watchlists, thresholds, cadence and lane allocations:
 
-- Discover Solana token profiles and GeckoTerminal trending-pool token addresses every two minutes. Prefer
+- Discover Solana token profiles from DexScreener every two minutes. Prefer
   trending discoveries in a bounded watchlist of 60 tokens; `watch_tokens` pins explicit contracts. This samples
   discoverable tokens, not every Solana launch or transaction. Discovery URLs, profiles and boosts are not proof
   of organic demand, wallet ownership or token safety.
@@ -117,7 +117,7 @@ Primary protocol references: [DEX Screener API](https://docs.dexscreener.com/api
 
 ## Batch engine
 
-1. Collect current CoinGecko, GeckoTerminal, DexScreener, Fear & Greed and DefiLlama observations.
+1. Collect current CMC, DexScreener, Fear & Greed and DefiLlama observations.
    Each run gets its own snapshot directory and per-source success/failure records; failed sources never reuse old data.
 2. Research original announcements/reporting and specific X posts through either the signed-in Grok CLI or the xAI
    Responses API. Both paths request structured stories, four copy lengths and claim-specific source URLs.
@@ -263,7 +263,7 @@ Full definitions (description, format, example, source hint, spoken-length estim
 Story-specific figures from research (e.g. a token's reported gain, a trader's liquidation level, ETF flow totals) stay as attributed text and refresh with each hourly research edition.
 
 - `render_feed.py` and `publish.sh` never fill prices (env pre-fill only applies to STATION_NAME, ANCHOR_NAME, TIME_OF_DAY_GREETING, TIME_SPOKEN).
-- `update_prices.py` is an optional local helper: it prints example values for every market variable from public APIs (CoinGecko, falling back to Coinbase, then Kraken) to test the station's substitution. It never touches published files.
+- `update_prices.py` is an optional local helper: it prints example values for every market variable from public APIs (CMC, falling back to Coinbase, then Kraken) to test the station's substitution. It never touches published files.
 - The `price-update` workflow is disabled and has no schedule. `pages.yml` deploys Pages on every push.
 - The historical hourly research job was external to this repository. The new engine does not install or alter it.
 
