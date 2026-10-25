@@ -17,7 +17,7 @@ Optional pre-fill at render: `STATION_NAME="Example FM" ANCHOR_NAME="Alex" pytho
 All copy follows `STYLE_GUIDE.md`: a public-broadcaster hourly newscast (neutral, attributed, Canadian spelling, jargon explained).
 
 ## Pipeline
-1. `build_feed.py` (automatic): CoinGecko, GeckoTerminal trending pools (solana/base/bsc), DexScreener, Fear & Greed, DefiLlama to `raw/<date>/`, `data-<date>.md` (raw/ is not published).
+1. `build_feed.py` (automatic): CMC quotes/global metrics, DexScreener, Fear & Greed, DefiLlama to `raw/<date>/`, `data-<date>.md` (raw/ is not published).
 2. Judgment step (not scripted): X `search_news` (max_age_hours=48) + `search_posts_all` + web search; verify, drop shill/bot spam and paid boosts;
    write `editions/_make_pool_<date>.py` in the STYLE_GUIDE voice, producing `editions/<date>.pool.json` (priority 1-3, text_medium/extra/short/flash, source_urls, timestamp).
 3. `render_feed.py`: fits the four formats (12/7/5/2.5 min at 150 wpm) and writes `latest*.json`, `schedule.json`, `feed.xml`, `feed-<date>*.md|json`.
@@ -46,6 +46,15 @@ Full definitions (description, format, example, source hint, spoken-length estim
 Story-specific figures from research (e.g. a token's reported gain, a trader's liquidation level, ETF flow totals) stay as attributed text and refresh with each hourly research edition.
 
 - `render_feed.py` and `publish.sh` never fill prices (env pre-fill only applies to STATION_NAME, ANCHOR_NAME, TIME_OF_DAY_GREETING, TIME_SPOKEN).
-- `update_prices.py` is an optional local helper: it prints example values for every market variable from public APIs (CoinGecko, falling back to Coinbase, then Kraken) to test the station's substitution. It never touches published files.
+- `update_prices.py` is an optional local helper: it prints example values for every market variable from public APIs (CMC, falling back to Coinbase, then Kraken) to test the station's substitution. It never touches published files.
 - The `price-update` workflow is disabled and has no schedule. `pages.yml` deploys Pages on every push.
 - Hourly research runs at :55 PT (separate job) and publishes with `publish.sh` (which `git pull --rebase`s first).
+
+## Donate
+
+If you found this to be useful, consider donating by sending magic internet monies to:
+
+```text
+sol: 79TNuyFNZWhDeFF1RUNA5Xk9Pccvb7xPYqLukBxCeWbb
+evm: 0xa2c0abd1a1fcb5aee12f80651ae7f646371a66ed
+```
