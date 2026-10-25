@@ -249,8 +249,8 @@ class RadarTests(unittest.TestCase):
         def fetch(url):
             if "token-profiles" in url:
                 return [{"chainId": "solana", "tokenAddress": TOKEN}, {"chainId": "base", "tokenAddress": "bad"}]
-            if "geckoterminal" in url:
-                return {"data": []}
+            self.assertNotIn("coingecko", url)
+            self.assertNotIn("geckoterminal", url)
             return [raw_pair()]
         collector = MarketCollector(self.store, self.config, fetch, clock=lambda: NOW)
         collector.tick(NOW, monotonic=0)

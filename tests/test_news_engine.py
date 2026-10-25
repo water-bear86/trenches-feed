@@ -228,7 +228,7 @@ class EngineTests(unittest.TestCase):
 
     def test_market_observations_expire_sooner_than_announcements(self):
         item = story()
-        item["event_url"] = build_feed.SOURCES["gt_solana"]
+        item["event_url"] = build_feed.SOURCES["prices"]
         item["claims"][0]["source_urls"] = [item["event_url"]]
         self.apply(envelope([item]))
         stored = self.engine.stories()[0]
@@ -385,12 +385,12 @@ class ResearchTests(unittest.TestCase):
     def test_failed_collect_does_not_reuse_previous_snapshot(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            build_feed.collect(root, ["cg_trending"], fetch=lambda _: {"coins": [1]}, pause=lambda _: None)
+            build_feed.collect(root, ["prices"], fetch=lambda _: {"coins": [1]}, pause=lambda _: None)
             def fail(_):
                 raise OSError("offline")
-            snapshot = build_feed.collect(root, ["cg_trending"], fetch=fail, pause=lambda _: None)
-            self.assertEqual(snapshot["sources"]["cg_trending"]["status"], "error")
-            self.assertNotIn("data", json.loads((root / "cg_trending.json").read_text()))
+            snapshot = build_feed.collect(root, ["prices"], fetch=fail, pause=lambda _: None)
+            self.assertEqual(snapshot["sources"]["prices"]["status"], "error")
+            self.assertNotIn("data", json.loads((root / "prices.json").read_text()))
 
 
 if __name__ == "__main__":

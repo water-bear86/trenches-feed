@@ -3,30 +3,80 @@
 
 The published feed leaves every price/market variable UNFILLED ({{BTC_PRICE}}, {{BTC_CHANGE_SPOKEN}}, ...);
 the station fills them at playback from its own data (e.g. Pyth feeds via Helius RPC).
-This helper fetches public prices (CoinGecko, falling back to Coinbase, then Kraken) and prints a JSON object of
+This helper fetches CMC prices (falling back to Coinbase, then Kraken) and prints a JSON object of
 example substitution values in the exact formats documented in latest.json -> "variables", so the station's
 substitution code can be tested.   Usage: python3 update_prices.py [out.json]
 If all sources fail it prints a message and exits 0. It never modifies published files.
 """
-import json, os, sys, datetime, urllib.request
+import json, os, sys, datetime, urllib.request, math
+from urllib.parse import urlsplit
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 UA = {"User-Agent": "trenches-feed-prices/1.0", "Accept": "application/json"}
 
-def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20) as r:
-        return json.loads(r.read().decode())
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
 
-def coingecko():
-    d = get("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,hyperliquid&vs_currencies=usd&include_24hr_change=true")
-    ids = {"BTC": "bitcoin", "ETH": "ethereum", "SOL": "solana", "HYPE": "hyperliquid"}
-    assets = {k: dict(usd=d[v]["usd"], change_24h_pct=round(d[v]["usd_24h_change"], 2)) for k, v in ids.items() if v in d and d[v].get("usd_24h_change") is not None}
-    out = dict(source="coingecko", assets=assets)
+def get(url):
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or parsed.hostname not in ("pro-api.coinmarketcap.com", "api.exchange.coinbase.com", "api.kraken.com") or parsed.username or parsed.password:
+        raise ValueError("Unsupported market source")
+    headers = dict(UA)
+    key = os.getenv("CMC_PRO_API_KEY") or os.getenv("CMC_API_KEY")
+    if parsed.hostname == "pro-api.coinmarketcap.com" and key:
+        url = url.replace("/public-api/", "/", 1)
+        headers["X-CMC_PRO_API_KEY"] = key
+    with urllib.request.build_opener(NoRedirect).open(urllib.request.Request(url, headers=headers), timeout=10) as response:
+        raw = response.read(4_000_001)
+    if len(raw) > 4_000_000:
+        raise ValueError("Provider response exceeds the size limit")
+    return json.loads(raw)
+
+def cmc_assets(body, expected, now=None):
+    if not isinstance(body, dict) or str(body.get("status", {}).get("error_code")) != "0" or not isinstance(body.get("data"), list):
+        raise ValueError("CMC prices unavailable")
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    assets = {}
+    for row in body["data"]:
+        if not isinstance(row, dict) or row.get("id") not in expected or row.get("symbol") != expected[row["id"]]:
+            continue
+        quote = next((q for q in row.get("quote", []) if isinstance(q, dict) and q.get("id") == 2781 and q.get("symbol") == "USD"), None)
+        if not quote:
+            continue
+        price, change = quote.get("price"), quote.get("percent_change_24h")
+        try:
+            observed = datetime.datetime.fromisoformat(quote["last_updated"].replace("Z", "+00:00"))
+            age = (now - observed).total_seconds()
+        except (TypeError, ValueError, KeyError):
+            continue
+        if type(price) not in (int, float) or not math.isfinite(price) or price <= 0 or type(change) not in (int, float) or not math.isfinite(change) or not -30 <= age <= 180:
+            continue
+        assets[expected[row["id"]]] = dict(usd=price, change_24h_pct=round(change, 2))
+    return assets
+
+def cmc_global(body, now=None):
+    if str(body.get("status", {}).get("error_code")) != "0":
+        raise ValueError("Global metrics unavailable")
+    quote = body["data"]["quote"]["USD"]
+    cap, change = quote["total_market_cap"], quote["total_market_cap_yesterday_percentage_change"]
+    if type(cap) not in (int, float) or not math.isfinite(cap) or cap <= 0 or type(change) not in (int, float) or not math.isfinite(change):
+        raise ValueError("Invalid global metrics")
+    observed = datetime.datetime.fromisoformat(quote["last_updated"].replace("Z", "+00:00"))
+    if not -30 <= ((now or datetime.datetime.now(datetime.timezone.utc)) - observed).total_seconds() <= 600:
+        raise ValueError("Global metrics are stale")
+    return quote
+
+def coinmarketcap():
+    root = "https://pro-api.coinmarketcap.com/public-api/"
+    body = get(root + "v3/cryptocurrency/quotes/latest?id=1,1027,5426,32196&convert=USD")
+    assets = cmc_assets(body, {1: "BTC", 1027: "ETH", 5426: "SOL", 32196: "HYPE"})
+    out = dict(source="coinmarketcap", assets=assets)
     try:
-        g = get("https://api.coingecko.com/api/v3/global")["data"]
-        out["global"] = dict(total_mcap_usd=g["total_market_cap"]["usd"], total_mcap_change_24h_pct=round(g["market_cap_change_percentage_24h_usd"], 2))
-    except Exception as e:
-        print("coingecko global failed:", e)
+        quote = cmc_global(get(root + "v1/global-metrics/quotes/latest"))
+        out["global"] = dict(total_mcap_usd=quote["total_market_cap"], total_mcap_change_24h_pct=round(quote["total_market_cap_yesterday_percentage_change"], 2))
+    except (OSError, ValueError, KeyError, TypeError):
+        print("CMC global metrics unavailable", file=sys.stderr)
     return out
 
 def coinbase():
@@ -78,7 +128,7 @@ def spoken_time(dt):
 def main():
     from zoneinfo import ZoneInfo
     m = None
-    for fn in (coingecko, coinbase, kraken):
+    for fn in (coinmarketcap, coinbase, kraken):
         try:
             r = fn()
             if all(k in r["assets"] for k in ("BTC", "ETH", "SOL")):

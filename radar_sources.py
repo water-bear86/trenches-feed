@@ -14,7 +14,6 @@ from research import NoRedirect, read_json
 from signals import ADDRESS, label, normalize_dex
 
 DEX = "https://api.dexscreener.com"
-GECKO = "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1"
 X_RULES = "https://api.x.com/2/tweets/search/stream/rules"
 X_STREAM = "https://api.x.com/2/tweets/search/stream?tweet.fields=created_at,author_id,edit_history_tweet_ids&expansions=author_id&user.fields=username"
 MAX_BODY = 4_000_000
@@ -57,7 +56,7 @@ def load_radar_config(path, engine_config):
 
 def request_json(url, *, headers=None, payload=None):
     parsed = urlsplit(url)
-    if parsed.scheme != "https" or parsed.hostname not in ("api.dexscreener.com", "api.geckoterminal.com", "api.x.com") or parsed.username or parsed.password:
+    if parsed.scheme != "https" or parsed.hostname not in ("api.dexscreener.com", "api.x.com") or parsed.username or parsed.password:
         raise ValueError("Radar HTTP source must be a supported public API.")
     request = urllib.request.Request(url, headers={"User-Agent": "ExitLiquidityRadar/1.0", "Accept": "application/json", **(headers or {})},
                                      data=json.dumps(payload).encode() if payload is not None else None)
@@ -90,19 +89,6 @@ class MarketCollector:
             self.store.health("dex_discovery", "ok", now, discovered=len(tokens), note="Profiles are discovery leads, not endorsements.")
         except (OSError, ValueError, TypeError, KeyError):
             self.store.health("dex_discovery", "error", now, note="Profile discovery failed; no old response was substituted.")
-        try:
-            body = self.fetch(GECKO)
-            if not isinstance(body, dict) or not isinstance(body.get("data"), list):
-                raise ValueError("Expected trending pools.")
-            tokens = []
-            for pool in body["data"]:
-                token = pool.get("relationships", {}).get("base_token", {}).get("data", {}).get("id", "")
-                if isinstance(token, str) and token.startswith("solana_") and ADDRESS.fullmatch(token[7:]):
-                    tokens.append(token[7:])
-            self.store.add_tokens(tokens[:60], now, "geckoterminal_trending")
-            self.store.health("geckoterminal", "ok", now, discovered=len(tokens), note="Trending discovery; market values are refreshed separately.")
-        except (OSError, ValueError, TypeError, AttributeError):
-            self.store.health("geckoterminal", "error", now, note="Trending discovery failed; watchlist collection continues.")
 
     def poll(self, now):
         tokens = self.store.watched_tokens(self.config, now)

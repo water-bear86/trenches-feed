@@ -17,15 +17,12 @@ Usage: python3 build_feed.py
 """
 import json, os, sys, time, datetime, urllib.request
 from pathlib import Path
+from update_prices import cmc_assets, cmc_global, NoRedirect, get as market_get
 
 UA = {"User-Agent": "trenches-feed/1.0", "Accept": "application/json"}
 SOURCES = {
-    "prices": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin&vs_currencies=usd&include_24hr_change=true&include_market_cap=true",
-    "global": "https://api.coingecko.com/api/v3/global",
-    "cg_trending": "https://api.coingecko.com/api/v3/search/trending",
-    "gt_solana": "https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1",
-    "gt_base": "https://api.geckoterminal.com/api/v2/networks/base/trending_pools?page=1",
-    "gt_bsc": "https://api.geckoterminal.com/api/v2/networks/bsc/trending_pools?page=1",
+    "prices": "https://pro-api.coinmarketcap.com/public-api/v3/cryptocurrency/quotes/latest?id=1,1027,5426,1839&convert=USD",
+    "global": "https://pro-api.coinmarketcap.com/public-api/v1/global-metrics/quotes/latest",
     "ds_boosts_top": "https://api.dexscreener.com/token-boosts/top/v1",
     "ds_boosts_latest": "https://api.dexscreener.com/token-boosts/latest/v1",
     "ds_profiles": "https://api.dexscreener.com/token-profiles/latest/v1",
@@ -34,8 +31,14 @@ SOURCES = {
 }
 
 def get(url):
+    if url.startswith("https://pro-api.coinmarketcap.com/"):
+        return market_get(url)
+    from urllib.parse import urlsplit
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or parsed.username or parsed.password or parsed.hostname not in ("api.dexscreener.com", "api.alternative.me", "api.llama.fi"):
+        raise ValueError("Unsupported market source")
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=10) as r:
+    with urllib.request.build_opener(NoRedirect).open(req, timeout=10) as r:
         raw = r.read(4_000_001)
     if len(raw) > 4_000_000:
         raise ValueError("API response exceeds the size limit")
@@ -57,10 +60,14 @@ def collect(output_dir, names=None, fetch=get, pause=time.sleep):
             data = fetch(SOURCES[name])
             if not isinstance(data, (dict, list)) or not data:
                 raise ValueError("Empty or malformed market response")
-            if isinstance(data, dict) and (data.get("error") or data.get("status", {}).get("error_code")):
+            if isinstance(data, dict) and (data.get("error") or data.get("status", {}).get("error_code") not in (None, 0, "0")):
                 raise ValueError("Provider returned an error object")
+            if name == "prices" and len(cmc_assets(data, {1: "BTC", 1027: "ETH", 5426: "SOL", 1839: "BNB"})) != 4:
+                raise ValueError("Incomplete or invalid CMC prices")
+            if name == "global":
+                cmc_global(data)
             record.update(status="ok", data=data)
-        except (OSError, ValueError, TypeError, AttributeError):
+        except (OSError, ValueError, TypeError, AttributeError, KeyError):
             record.update(status="error", error="Market source failed or returned invalid data")
         sources[name] = record
         (output_dir / f"{name}.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
@@ -89,30 +96,19 @@ def main():
     L.append("## Source status"); L += [f"- {k}: {v}" for k, v in status.items()]; L.append("")
     L.append("## Majors / market")
     if "prices" in data:
-        for c, v in data["prices"].items():
-            L.append(f"- {c}: ${v['usd']:,} ({v['usd_24h_change']:+.2f}% 24h)")
+        for symbol, value in cmc_assets(data["prices"], {1: "BTC", 1027: "ETH", 5426: "SOL", 1839: "BNB"}).items():
+            L.append(f"- {symbol}: ${value['usd']:,} ({value['change_24h_pct']:+.2f}% 24h)")
     if "global" in data:
-        g = data["global"]["data"]
-        L.append(f"- Total mcap {money(g['total_market_cap']['usd'])} ({g['market_cap_change_percentage_24h_usd']:+.2f}% 24h), BTC dominance {g['market_cap_percentage']['btc']:.1f}%")
+        try:
+            g = cmc_global(data["global"])
+            L.append(f"- Total mcap {money(g['total_market_cap'])} ({g['total_market_cap_yesterday_percentage_change']:+.2f}% 24h), BTC dominance {data['global']['data']['btc_dominance']:.1f}%")
+        except (KeyError, TypeError, ValueError):
+            L.append("- Global market metrics unavailable")
     if "fng" in data:
         f = data["fng"]["data"][0]; L.append(f"- Fear & Greed: {f['value']} ({f['value_classification']})")
     if "llama_sol_dex" in data:
         d = data["llama_sol_dex"]; L.append(f"- Solana DEX volume 24h: {money(d.get('total24h'))} ({d.get('change_1d')}% 1d)")
     L.append("")
-    if "cg_trending" in data:
-        L.append("## CoinGecko trending searches")
-        for c in data["cg_trending"]["coins"]:
-            i = c["item"]; ch = (i.get("data") or {}).get("price_change_percentage_24h", {}).get("usd")
-            L.append(f"- {i['symbol']} ({i['name']}) 24h: {ch:+.1f}%" if ch is not None else f"- {i['symbol']} ({i['name']})")
-        L.append("")
-    for net in ("solana", "base", "bsc"):
-        k = f"gt_{net}"
-        if k not in data: continue
-        L.append(f"## GeckoTerminal trending pools - {net}")
-        for p in data[k]["data"][:15]:
-            a = p["attributes"]; dex = p["relationships"]["dex"]["data"]["id"]
-            L.append(f"- {a['name']} | FDV {money(a.get('fdv_usd'))} | vol24 {money(a['volume_usd']['h24'])} | 24h {a['price_change_percentage']['h24']}% | created {a['pool_created_at']} | {dex} | https://www.geckoterminal.com/{net}/pools/{a['address']}")
-        L.append("")
     if "ds_boosts_top" in data:
         L.append("## DexScreener top boosted tokens (PAID promotion - not organic signal)")
         for x in data["ds_boosts_top"][:20]:
