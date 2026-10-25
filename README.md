@@ -304,6 +304,8 @@ It does not install a service or migrate a Grok login, story ledger or research
 allowance. The station must recheck feed health, revision, withdrawal and expiry
 before airing a cached recording. Monitor certificate expiry when operating it.
 
+For scheduled collection, store `CMC_PRO_API_KEY` (or `CMC_API_KEY`) in a private server environment. `build_feed.sh` optionally reads `$HOME/.config/trenches-feed/provider.env` (override with `CMC_ENV_FILE`). Keep the directory private and the file mode `0600`. A CMC key enables supported quotes and global metrics; a failed source is reported as unavailable.
+
 ## Donate
 
 If you found this to be useful, consider donating by sending magic internet monies to:
